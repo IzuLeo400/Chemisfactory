@@ -2,6 +2,8 @@ import math
 import pygame
 
 from scripts.entities.action import Action
+from pygame.rect import Rect
+from scripts.sprites import Animation
 
 class PhysicsEntity:
     """
@@ -25,6 +27,7 @@ class PhysicsEntity:
         self.sprite_offset = sprite_offset
         #Action class -- the current action being preformed by the entity -- if no action then None
         self.action = Action(self)
+        self.animation = Animation([], 1, False)
         #String -- the direction the player is facing using 'w' 'a' 's' 'd' 
         self.direction = "s"
         
@@ -42,11 +45,20 @@ class PhysicsEntity:
             self.animation = self.game.assets[self.type][self.action.name][self.direction].copy()
 
     def set_direction(self, direction):
+        """
+        changes the direction of the animation
+
+        :param direction: the direction the player is facing using 'w' 'a' 's' 'd' 
+        """
         if self.direction != direction:
             self.direction = direction
             self.animation = self.game.assets[self.type][self.action.name][self.direction].copy()
 
-    def rect(self):
+    def rect(self) -> Rect:
+        """
+        :return: The pygame rectangle that contains the position and hitbox of the entity
+        :rtype: Rect
+        """
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
  
     def update(self, tilemap, movement=(0, 0)):
