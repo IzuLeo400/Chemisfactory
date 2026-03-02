@@ -1,8 +1,6 @@
 import math
 import pygame
 
-from scripts.tiles.sources import Source
-
 class PhysicsEntity:
     def __init__(self, game, e_type, pos, size, sprite_offset):
         self.game = game
