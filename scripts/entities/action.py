@@ -2,7 +2,7 @@ class Action():
     """
     The abstract class for an action preformed by an entity \n Arguments:
 
-    1: Player -- Player or entity -- what is preforming the action
+    1: entity -- Player or PhysicsEntity -- what is preforming the action
 
     2: Name -- String -- The name of the action preformed
 
@@ -14,8 +14,8 @@ class Action():
         Arguments:
         -- interrupted -- boolean -- True if the action was interrupted
     """
-    def __init__(self, player, name,  start=None, update=None, end=None):
-        self.m_player = player
+    def __init__(self, entity, name='',  start=None, update=None, end=None):
+        self.m_entity = entity
         self.m_name = name
         self.m_start = start
         self.m_update = update

@@ -1,24 +1,40 @@
 import math
 import pygame
 
+from scripts.entities.action import Action
+
 class PhysicsEntity:
+    """
+    The abstract class for an entity with collisions
+    
+    :param game: -- Game -- The actual main class controlling the entire game
+    :param e_type: -- String -- The type of the entity (ie: "player")
+    :param pos: -- Tuple(x, y) -- The position of the player in the world measured in pixels
+    :param size: -- Tuple(width, height) -- actual size of hitbox of the entity
+    :param sprite_offset: -- Tuple(x, y) -- the offset from the top left of the entity image to the top left of its hitbox
+    """
     def __init__(self, game, e_type, pos, size, sprite_offset):
         self.game = game
         self.type = e_type
         self.pos = list(pos)
         self.size = size
+        #tuple(float, float) -- the speed of the entity measued in pixels (x, y) 
         self.velocity = [0, 0]
+        #dictionary{} -- the collisions of each direction (mapped to a bool)
         self.collisions = {'up': False, 'down': False, 'right': False, 'left': False}
         self.sprite_offset = sprite_offset
-
-        self.action = ''
+        #Action class -- the current action being preformed by the entity -- if no action then None
+        self.action = Action(self)
+        #String -- the direction the player is facing using 'w' 'a' 's' 'd' 
         self.direction = "s"
+        
+        self.entity_actions = {"Idle": Action(self, "Idle")}
         self.set_action("Idle")
         
     def set_action(self, action):
-        if action != self.action:
-            self.action = action
-            self.animation = self.game.assets[self.type][self.action][self.direction].copy()
+        if action != self.action.name:
+            self.action = self.entity_actions[action]
+            self.animation = self.game.assets[self.type][action][self.direction].copy()
 
     def set_direction(self, direction):
         if self.direction != direction:

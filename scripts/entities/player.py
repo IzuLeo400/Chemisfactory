@@ -3,6 +3,7 @@ import pygame
 
 from scripts.constants import Constants
 from scripts.entities import mouse_commands
+from scripts.entities.action import Action
 from scripts.tiles.sources import Source
 from scripts.entities.entity import PhysicsEntity
 from scripts.ui_elements.window import Window
@@ -30,12 +31,12 @@ class Player(PhysicsEntity):
         self.tilemap = game.tilemap
         #Tile class -- the tile the cursor is currently over -- if not above tile then None
         self.hover_tile = None
-        #Action class -- the current action being preformed by the player -- if no action then None
-        self.action = None 
         #String -- queue the next action using either "cancel" or the key in the action dictionary
         self.action_trigger = None
         #Tuple(Bool, Bool, Bool) -- True when mouse button is pressed -- [Left, Middle, Right] -- Otherwise False
         self.click_type = [False, False, False]
+
+        
 
     def update_movement(self, movement=(0, 0, 0, 0)):
         """
