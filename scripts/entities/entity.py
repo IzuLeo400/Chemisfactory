@@ -32,14 +32,19 @@ class PhysicsEntity:
         self.set_action("Idle")
         
     def set_action(self, action):
+        """
+        sets the action to the new action in entity_actions
+
+        :param action: -- String -- the key to the entity_actions dictionary (ie: "Idle")
+        """
         if action != self.action.name:
             self.action = self.entity_actions[action]
-            self.animation = self.game.assets[self.type][action][self.direction].copy()
+            self.animation = self.game.assets[self.type][self.action.name][self.direction].copy()
 
     def set_direction(self, direction):
         if self.direction != direction:
             self.direction = direction
-            self.animation = self.game.assets[self.type][self.action][self.direction].copy()
+            self.animation = self.game.assets[self.type][self.action.name][self.direction].copy()
 
     def rect(self):
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
