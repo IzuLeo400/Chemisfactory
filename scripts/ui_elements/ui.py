@@ -4,6 +4,7 @@ from scripts.ui_elements.inventory import Inventory
 from scripts.ui_elements.mouse import Cursor
 from scripts.constants import Constants 
 from scripts.ui_elements.text import Text
+from scripts.ui_elements.window import Window
 
 class Manager():
     def __init__(self, selected_tile=(None, None), interactable=None):

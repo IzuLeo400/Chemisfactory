@@ -3,6 +3,7 @@ import pygame
 
 from scripts.entities.action import Action
 from pygame.rect import Rect
+from scripts.entities.player_actions.mine import Mine
 from scripts.sprites import Animation
 
 class PhysicsEntity:
@@ -27,11 +28,11 @@ class PhysicsEntity:
         self.sprite_offset = sprite_offset
         #Action class -- the current action being preformed by the entity -- if no action then None
         self.action = Action(self)
-        self.animation = Animation([], 1, False)
+        self.animation = Animation([], 1)
         #String -- the direction the player is facing using 'w' 'a' 's' 'd' 
         self.direction = "s"
-        
-        self.entity_actions = {"Idle": Action(self, "Idle")}
+        #Actions preformable by any entity
+        self.entity_actions = {"Idle": Action(self, "Idle"), "Walk": Action(self, "Walk")}
         self.set_action("Idle")
         
     def set_action(self, action):
@@ -40,9 +41,9 @@ class PhysicsEntity:
 
         :param action: -- String -- the key to the entity_actions dictionary (ie: "Idle")
         """
-        if action != self.action.name:
+        if action != self.action.m_name:
             self.action = self.entity_actions[action]
-            self.animation = self.game.assets[self.type][self.action.name][self.direction].copy()
+            self.animation = self.game.assets[self.type][self.action.m_name][self.direction].copy()
 
     def set_direction(self, direction):
         """
@@ -52,7 +53,7 @@ class PhysicsEntity:
         """
         if self.direction != direction:
             self.direction = direction
-            self.animation = self.game.assets[self.type][self.action.name][self.direction].copy()
+            self.animation = self.game.assets[self.type][self.action.m_name][self.direction].copy()
 
     def rect(self) -> Rect:
         """
@@ -62,10 +63,18 @@ class PhysicsEntity:
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
  
     def update(self, tilemap, movement=(0, 0)):
+        """
+        The movement and collisions control for the entity
+        
+        :param tilemap: -- Tilemap -- all the tiles in the game
+        :param movement: -- Tuple(double, double) -- the movement of the entity (x, y)
+        """
+        #Reset collisions
         self.collisions = {'up': False, 'down': False, 'right': False, 'left': False}
         
         frame_movement = (movement[0], movement[1])
         
+        #Check x movement - if it collides with another rect then move to edge of rect instead
         self.pos[0] += frame_movement[0]
         entity_rect = self.rect()
         for rect in tilemap.physics_rects_around(self.pos, depth=1):
@@ -78,6 +87,7 @@ class PhysicsEntity:
                     self.collisions['left'] = True
                 self.pos[0] = entity_rect.x
         
+        #Check y movement - if it collides with another rect then move to edge of rect instead
         self.pos[1] += frame_movement[1]
         entity_rect = self.rect()
         for rect in tilemap.physics_rects_around(self.pos, depth=1):
@@ -90,6 +100,7 @@ class PhysicsEntity:
                     self.collisions['up'] = True
                 self.pos[1] = entity_rect.y
         
+        #Updates the animation after the movement
         self.animation.update()
     
     def render(self, surf, offset=(0, 0)):

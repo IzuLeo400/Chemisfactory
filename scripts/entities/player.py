@@ -4,6 +4,7 @@ import pygame
 from scripts.constants import Constants
 from scripts.entities import mouse_commands
 from scripts.entities.action import Action
+from scripts.entities.player_actions.mine import Mine
 from scripts.tiles.sources import Source
 from scripts.entities.entity import PhysicsEntity
 from scripts.ui_elements.window import Window
@@ -35,8 +36,9 @@ class Player(PhysicsEntity):
         self.action_trigger = None
         #Tuple(Bool, Bool, Bool) -- True when mouse button is pressed -- [Left, Middle, Right] -- Otherwise False
         self.click_type = [False, False, False]
+        #Add player specific action to the possible actions
+        self.entity_actions["Mine"] = Mine(self, self.ui)
 
-        
 
     def update_movement(self, movement=(0, 0, 0, 0)):
         """
@@ -51,10 +53,6 @@ class Player(PhysicsEntity):
             self.x_movement /= math.sqrt(2)
             self.y_movement /= math.sqrt(2)
         super().update(self.tilemap, movement=(self.x_movement, self.y_movement))
-
-        #If player moves while attempting to mine it will cancel the action
-        if self.action == "Mine" and (abs(self.x_movement) > 0.2 or abs(self.y_movement) > 0.2):
-            self.action_trigger = "Cancel"
             
     def update_actions(self):
         """
@@ -71,8 +69,7 @@ class Player(PhysicsEntity):
         
         self.update_mouse_input()
 
-        if self.action_function is not None:
-            self.action_function(self)
+        self.action.update()
 
         self.update_animations()
 
@@ -122,7 +119,8 @@ class Player(PhysicsEntity):
 
     def update_animations(self):
         """
-        Updates the players actions and animations
+        Updates the players actions and animations \n
+        Does not update the actual animation class, that is done in PhysicsEntity.update
         """
         if self.action_trigger == "Cancel":
             self.action_trigger = None
@@ -131,8 +129,6 @@ class Player(PhysicsEntity):
         if self.action_trigger == "Mine":
             self.action_trigger = None
             self.set_action("Mine")
-        elif self.action == "Mine":
-            pass
         elif abs(self.x_movement) > 0:
             if self.x_movement > 0:
                 self.set_direction("d")
@@ -148,13 +144,4 @@ class Player(PhysicsEntity):
                 self.set_direction("w")
                 self.set_action("Walk")
         else:
-            self.set_action("Idle")
-
-    def mine_start(self):
-        """
-        Method to run when the player start mining
-        """
-        print("made progress bar")
-        progressBar = Window("progressBar", self.ui, self.ui.assets["ProgressBar"], 
-                             (Constants.screen_width/4 - Constants.progress_bar_width/2, Constants.screen_height/2), 
-                             (Constants.progress_bar_width, Constants.progress_bar_height), is_open=True, border_color=(255, 225, 0))
+            self.set_action("Idle")        

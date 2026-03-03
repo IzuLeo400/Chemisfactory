@@ -148,6 +148,11 @@ class Window:
         self.ui.open_interactables[self.id] = self
         self.prioritize_render()
 
+    def delete(self):
+        self.close()
+        if self.id in self.ui.all_windows:
+            self.ui.all_windows.pop(self.id)
+
     def render(self, surface):
         top_border = self.top_border
         border = self.border+1
