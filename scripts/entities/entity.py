@@ -49,7 +49,7 @@ class PhysicsEntity:
         """
         changes the direction of the animation
 
-        :param direction: the direction the player is facing using 'w' 'a' 's' 'd' 
+        :param direction: -- String -- the direction the player is facing using 'w' 'a' 's' 'd' 
         """
         if self.direction != direction:
             self.direction = direction
