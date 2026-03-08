@@ -72,7 +72,6 @@ class UI:
         return False
 
     def render(self, surface):
-        print(self.render_order)
         for name in self.render_order:
             interactable = self.open_interactables[name]
             interactable.render(surface)      

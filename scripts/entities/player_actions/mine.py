@@ -11,13 +11,13 @@ class Mine(Action):
     :param ui: The UI class for the whole game to make and destroy the ui elements accompanying the mining
     """
     def __init__(self, player, ui):
-        super.__init__(player, "Mine", self.start, self.update, self.end)
+        super().__init__(player, "Mine", self.start, self.update, self.end)
         self.ui = ui
         self.progressBar = None
         
         
     def start(self):
-        self.progressBar = unInteractable("progressBar", self.ui, self.ui.assets["ProgressBar"], 16
+        self.progressBar = unInteractable("progressBar", self.ui, self.ui.assets["ProgressBar"], 16,
                              (Constants.screen_width/4 - Constants.progress_bar_width/2, Constants.screen_height/2), 
                              (Constants.progress_bar_width, Constants.progress_bar_height), is_open=True, border_color=(255, 225, 0))
         

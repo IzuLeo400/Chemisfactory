@@ -71,9 +71,7 @@ class Game:
                     "8": load_image('UI/font/8.png'),
                     "9": load_image('UI/font/9.png'),
                 },
-                "ProgressBar": {
-
-                }
+                "ProgressBar": load_image('UI/progressbar.png'),
             },
             "Background": load_image('Background/background.jpg'),
             "Structures": {
