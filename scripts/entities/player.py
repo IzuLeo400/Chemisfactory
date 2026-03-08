@@ -125,11 +125,13 @@ class Player(PhysicsEntity):
         if self.action_trigger == "Cancel":
             self.action_trigger = None
             self.set_action("Idle")
-
         if self.action_trigger == "Mine":
             self.action_trigger = None
-            self.set_action("Mine")
-        elif abs(self.x_movement) > 0:
+            self.set_action("Mine")  
+        # print(f"self.action_trigger: {self.action_trigger}, self.action.name: {self.action.m_name}")
+
+        
+        if abs(self.x_movement) > 0:
             if self.x_movement > 0:
                 self.set_direction("d")
                 self.set_action("Walk")
@@ -144,4 +146,7 @@ class Player(PhysicsEntity):
                 self.set_direction("w")
                 self.set_action("Walk")
         else:
-            self.set_action("Idle")        
+            if self.action.m_name == "Mine":
+                return
+            self.set_action("Idle")      
+        

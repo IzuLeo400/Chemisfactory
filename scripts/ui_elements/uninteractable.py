@@ -8,12 +8,16 @@ class unInteractableManager(Manager):
         super().__init__(ui)
         self.uninteractable = uninteractable
         self.type = None
+        self.tile_size = Constants.tile_size
     
     def get_global_selected_tile(self) -> tuple[int, int]:
         return self.ui.manager.get_selected_tile()
     
     def same_interactable(self) -> bool:
         return self.interactable == self.ui.manager.get_interactable()
+    
+    def get_tile_size(self) -> int:
+        return self.uninteractable.tile_size
 
 class unInteractableSlot:
     def __init__(self, pose, assets, tile_size, manager, item=None):

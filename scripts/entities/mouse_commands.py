@@ -43,7 +43,7 @@ def left_release(self):
         pass
 
 def right_release(self):
-    if self.action == "Mine":
+    if self.action.m_name == "Mine":
         self.action_trigger = "Cancel"
 
 def middle_release(self):

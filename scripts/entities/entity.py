@@ -42,7 +42,9 @@ class PhysicsEntity:
         :param action: -- String -- the key to the entity_actions dictionary (ie: "Idle")
         """
         if action != self.action.m_name:
+            self.action.end(interrupted=True)
             self.action = self.entity_actions[action]
+            self.action.start()
             self.animation = self.game.assets[self.type][self.action.m_name][self.direction].copy()
 
     def set_direction(self, direction):
