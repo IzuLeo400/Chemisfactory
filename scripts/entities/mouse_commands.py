@@ -1,7 +1,6 @@
 import pygame
 
 from scripts.constants import Constants
-from scripts.entities.action import Action
 from scripts.tiles.sources import Source
 
 
@@ -23,6 +22,7 @@ def right_click(self):
                         self.direction = "w"
                     else:
                         self.direction = "s"
+                self.entity_actions["Mine"].set_source(self.hover_tile)
         else:
             #Player clicked on source but was too far away
             pass

@@ -129,7 +129,6 @@ class Player(PhysicsEntity):
             self.action_trigger = None
             self.set_action("Mine")  
         # print(f"self.action_trigger: {self.action_trigger}, self.action.name: {self.action.m_name}")
-
         
         if abs(self.x_movement) > 0:
             if self.x_movement > 0:
