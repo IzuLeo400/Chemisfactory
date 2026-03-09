@@ -12,5 +12,6 @@ class Constants:
     letter_gap = 1
     letter_width = 4
     hotbar_width = 10
-    progress_bar_width = 80
-    progress_bar_height = 10
+    progress_bar_width = 7
+    progress_bar_height = 1
+    progress_bar_y_offset = 165
