@@ -10,9 +10,9 @@ class Tilemap:
         self.tile_size = tile_size
         self.tilemap = {}
 
-        self.tilemap[(-2, -3)] = Hydrogen((-2, -3), self.game.assets["Sources"]["HydrogenSource"], self.tile_size)
-        self.tilemap[(-4, -1)] = Oxygen((-4, -1), self.game.assets["Sources"]["OxygenSource"], self.tile_size)
-        self.tilemap[(3, 4)] = Iron((3, 4), self.game.assets["Sources"]["IronSource"], self.tile_size)
+        self.tilemap[(-2, -3)] = Hydrogen((-2, -3), self.game.assets["Sources"]["HydrogenSource"], self.tile_size, game)
+        self.tilemap[(-4, -1)] = Oxygen((-4, -1), self.game.assets["Sources"]["OxygenSource"], self.tile_size, game)
+        self.tilemap[(3, 4)] = Iron((3, 4), self.game.assets["Sources"]["IronSource"], self.tile_size, game)
 
     def point_to_loc(self, pos):
         return (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))

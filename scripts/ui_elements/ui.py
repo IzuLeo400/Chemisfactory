@@ -78,3 +78,28 @@ class UI:
 
     def render_cursor(self, surface, offset=(0, 0)):
         self.cursor.render(surface, offset)  
+
+    def add_item(self, item):
+        name = item.name
+        for inventory_slot in self.hotbar.items:
+            item_check = self.hotbar.items[inventory_slot].get_item()
+            if item_check is not None and item_check.name == name:
+                self.hotbar.items[inventory_slot].add_item()
+                return 
+        for inventory_slot in self.inventory.items:
+            item_check = self.inventory.items[inventory_slot].get_item()
+            if item_check is not None and item_check.name == name:
+                self.inventory.items[inventory_slot].add_item()
+                return 
+        for inventory_slot in self.hotbar.items:
+            if self.hotbar.items[inventory_slot].is_empty():
+                item.pos = inventory_slot
+                self.hotbar.items[inventory_slot].set_item(item)
+                return 
+        for inventory_slot in self.inventory.items:
+            if self.inventory.items[inventory_slot].is_empty():
+                item.pos = inventory_slot
+                self.inventory.items[inventory_slot].set_item(item)
+                return 
+        
+        

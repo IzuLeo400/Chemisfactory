@@ -1,4 +1,5 @@
 import pygame
+from scripts.tiles.item import Item
 from scripts.ui_elements.window import Manager, Window
 from scripts.constants import Constants
 from scripts.structures.structure import Structure
@@ -91,10 +92,10 @@ class InteractableSlot:
         else:
             self.quantity -= quantity
 
-    def get_item(self) -> Structure:
+    def get_item(self) -> Item:
         return self.item
 
-    def set_item(self, item, quantity):
+    def set_item(self, item, quantity=1):
         self.item = item
         self.quantity = quantity
 
@@ -103,6 +104,12 @@ class InteractableSlot:
 
     def set_quantity(self, quantity):
         self.quantity = quantity
+
+    def add_item(self):
+        self.set_quantity(self.quantity + 1)
+
+    def is_empty(self) -> bool:
+        return self.item == None
 
     def render(self, surface, pose):
         location = (pose[0] + self.pose[0] * self.tile_size,

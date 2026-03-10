@@ -15,7 +15,7 @@ class Game:
     def __init__(self):
         pygame.init()
 
-        pygame.display.set_caption("Factory Game")
+        pygame.display.set_caption("Chemisfactory")
         self.screen = pygame.display.set_mode((Constants.screen_width, Constants.screen_height))
         self.display = pygame.Surface((Constants.display_width, Constants.display_height))
 
@@ -97,9 +97,9 @@ class Game:
 
         self.ui = UI(self, self.assets["UI"], self.input, Constants.inventory_tile_size)
 
-        self.ui.inventory.items[(0, 0)].set_item(Item("Iron", (0, 0), 16, self.assets["Items"]["Iron"]), 6)
-        self.ui.inventory.items[(1, 0)].set_item(Item("Hydrogen", (0, 1), 16, self.assets["Items"]["Hydrogen"]), 7)
-        self.ui.inventory.items[(0, 1)].set_item(Item("Oxygen", (1, 0), 16, self.assets["Items"]["Oxygen"]), 9)
+        # self.ui.inventory.items[(0, 0)].set_item(Item("Iron", (0, 0), 16, self.assets["Items"]["Iron"]), 6)
+        # self.ui.inventory.items[(1, 0)].set_item(Item("Hydrogen", (0, 1), 16, self.assets["Items"]["Hydrogen"]), 7)
+        # self.ui.inventory.items[(0, 1)].set_item(Item("Oxygen", (1, 0), 16, self.assets["Items"]["Oxygen"]), 9)
 
         self.player = Player(self, (0, 0), (6, 6), (13, 16))
         

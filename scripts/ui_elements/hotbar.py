@@ -15,5 +15,5 @@ class Hotbar(Interactable):
             if idx > 9:
                 return 
             if hotkeys[idx]:
-                super().manager.set_selected_tile((idx, 0))
+                self.manager.set_selected_tile((idx, 0))
                 return 

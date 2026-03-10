@@ -33,13 +33,14 @@ class Mine(Action):
         if self.progress >= self.source.difficulty:
             self.end(False)
         if self.progressBar.items[(int(self.progress), 0)].item is None:
-            self.progressBar.items[(int(self.progress), 0)].item = Item((int(self.progress), 0), 16, self.ui.assets["ProgressBar"]["full"])
+            self.progressBar.items[(int(self.progress), 0)].item = Item("progressbar", (int(self.progress), 0), 16, self.ui.assets["ProgressBar"]["full"])
 
     def end(self, interrupted):
         if interrupted:
             self.progressBar.delete()
             self.progressBar = None
         else:
+            self.ui.add_item(self.source.item)
             self.progressBar.reset()
             self.progress = 0
         

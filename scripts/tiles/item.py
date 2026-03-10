@@ -1,7 +1,7 @@
 from scripts.tiles.tile import Tile
 
 class Item(Tile):
-    def __init__(self, name,pos, size, img):
+    def __init__(self, name, pos=(None, None), size=16, img=None):
         super().__init__(pos, size, img)
         self.name = name
 
