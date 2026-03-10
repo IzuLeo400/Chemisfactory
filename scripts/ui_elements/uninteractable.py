@@ -1,7 +1,7 @@
 import pygame
 from scripts.ui_elements.window import Manager, Window
 from scripts.constants import Constants
-from scripts.structures.structure import Structure
+from scripts.tiles.structures.structure import Structure
 
 class unInteractableManager(Manager):
     def __init__(self, uninteractable, ui):

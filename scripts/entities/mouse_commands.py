@@ -3,14 +3,10 @@ import pygame
 from scripts.constants import Constants
 from scripts.tiles.sources import Source
 
-
-def left_click(self):
-        pass
-
-def right_click(self):
+def source_click(self, action):
     if issubclass(self.hover_tile.__class__, Source):
         if self.hover_tile.in_range(self.center_pose(), depth=1):
-                self.action_trigger = "Mine"
+                self.action_trigger = action
                 offset = (self.pos[0] - self.hover_tile.pos[0] * Constants.tile_size - 5, self.pos[1] - self.hover_tile.pos[1] * Constants.tile_size - 5)
                 if abs(offset[0]) > abs(offset[1]):
                     if offset[0] > 0:
@@ -22,10 +18,16 @@ def right_click(self):
                         self.direction = "w"
                     else:
                         self.direction = "s"
-                self.entity_actions["Mine"].set_source(self.hover_tile)
+                self.entity_actions[action].set_source(self.hover_tile)
         else:
             #Player clicked on source but was too far away
             pass
+
+def left_click(self):
+    source_click(self, "Build")
+
+def right_click(self):
+    source_click(self, "Mine")
 
 def middle_click(self):
     pass

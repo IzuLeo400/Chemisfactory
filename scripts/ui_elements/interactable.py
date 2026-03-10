@@ -2,7 +2,7 @@ import pygame
 from scripts.tiles.item import Item
 from scripts.ui_elements.window import Manager, Window
 from scripts.constants import Constants
-from scripts.structures.structure import Structure
+from scripts.tiles.structures.structure import Structure
 
 class InteractableManager(Manager):
     def __init__(self, interactable, ui):
@@ -211,7 +211,7 @@ class Interactable(Window):
             self.x = Constants.display_width - self.border - self.size[0] * self.tile_size
         if self.y < self.top_border:
             self.y = self.top_border
-        if self.y > Constants.display_height - self.border - self.size[1] * self.tile_size:
+        elif self.y > Constants.display_height - self.border - self.size[1] * self.tile_size:
             self.y = Constants.display_height - self.border - self.size[1] * self.tile_size
 
     def stop_all_drag(self):
@@ -248,7 +248,7 @@ class Interactable(Window):
                 return True
         return False
     
-    def inventory_click(self, mouse_pose, type="left"):
+    def inventory_click(self, mouse_pose, type):
         self.prioritize_render()
         idx = ((mouse_pose[0]-self.x)//self.tile_size, (mouse_pose[1]-self.y)//self.tile_size)
         if idx in self.items:

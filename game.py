@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.structures.miner import Miner
+from scripts.tiles.structures.miner import Miner
 from scripts.tiles.item import Item
 from scripts.ui_elements.inputs import Input
 from scripts.ui_elements.mouse import Mouse
@@ -72,8 +72,10 @@ class Game:
                     "9": load_image('UI/font/9.png'),
                 },
                 "ProgressBar":{
-                    None: load_image('UI/emptyProgressBar.png'),
-                    "full": load_image('UI/fullProgressBar.png'),
+                    "Mine": {
+                        None: load_image('UI/emptyProgressBar.png'),
+                        "full": load_image('UI/fullProgressBar.png'),
+                    },
                 }, 
             },
             "Background": load_image('Background/background.jpg'),
@@ -100,6 +102,7 @@ class Game:
         # self.ui.inventory.items[(0, 0)].set_item(Item("Iron", (0, 0), 16, self.assets["Items"]["Iron"]), 6)
         # self.ui.inventory.items[(1, 0)].set_item(Item("Hydrogen", (0, 1), 16, self.assets["Items"]["Hydrogen"]), 7)
         # self.ui.inventory.items[(0, 1)].set_item(Item("Oxygen", (1, 0), 16, self.assets["Items"]["Oxygen"]), 9)
+        self.ui.hotbar.items[(0, 0)].set_item(Miner((0, 0), Constants.tile_size, self.assets["Structures"]["Miner"], None), 1)
 
         self.player = Player(self, (0, 0), (6, 6), (13, 16))
         
