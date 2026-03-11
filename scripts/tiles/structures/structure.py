@@ -4,8 +4,10 @@ from scripts.tiles.item import Item
 from scripts.tiles.tile import Tile
 
 class Structure(Item):
-    def __init__(self, name, pos=(None, None), size=16, img=None, rotation=0):
+    def __init__(self, name, pos=(None, None), size=16, img=None, build_speed=1, build_difficulty=4, rotation=0):
         super().__init__(name, pos, size, img, solid=True, rotation=rotation)
+        self.build_speed = build_speed
+        self.build_difficulty = build_difficulty
 
     def render(self, surface, offset=(0, 0), tilemap=True):
         if self.source is not None:

@@ -5,11 +5,13 @@ from scripts.ui_elements.mouse import Cursor
 from scripts.constants import Constants 
 from scripts.ui_elements.text import Text
 from scripts.ui_elements.window import Window
+from scripts.tiles.item import Item
 
 class Manager():
     def __init__(self, selected_tile=(None, None), interactable=None):
         self.selected_tile = selected_tile
         self.interactable = interactable
+        self.selected_item = None
 
     def set_selected_tile(self, selected_tile):
         self.selected_tile = selected_tile
@@ -22,6 +24,12 @@ class Manager():
 
     def get_interactable(self) -> Interactable:
         return self.interactable
+    
+    def set_selected_item(self, item):
+        self.selected_item = item
+
+    def get_selected_item(self) -> Item:
+        return self.selected_item
 
 class UI:
     def __init__(self, game, assets, input, tile_size):
@@ -43,7 +51,7 @@ class UI:
                                       (Constants.inventory_width, Constants.inventory_height), 
                                       self.input.get_hotkeys, Constants.inventory_border, Constants.inventory_top_border, draggable=True, exit=True)
         
-        self.cursor = Cursor(self.input.mouse, assets["Cursor"], Constants.tile_size)
+        self.cursor = Cursor(self, self.input.mouse, assets["Cursor"], Constants.tile_size)
 
         self.manager = Manager()
         
@@ -102,4 +110,6 @@ class UI:
                 self.inventory.items[inventory_slot].set_item(item)
                 return 
         
-        
+    def remove_item(self):
+        interactable = self.manager.get_interactable()
+        interactable.items[interactable.manager.get_selected_tile()].subtract(1)

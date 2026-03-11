@@ -4,6 +4,7 @@ from scripts.constants import Constants
 from scripts.tiles.sources import Source
 
 def source_click(self, action):
+    print(f"source_click with action: {action}")
     if issubclass(self.hover_tile.__class__, Source):
         if self.hover_tile.in_range(self.center_pose(), depth=1):
                 self.action_trigger = action
@@ -19,16 +20,17 @@ def source_click(self, action):
                     else:
                         self.direction = "s"
                 self.entity_actions[action].set_source(self.hover_tile)
+                self.entity_actions[action].set_item(self.ui.manager.get_selected_item())
         else:
             #Player clicked on source but was too far away
             pass
 
 def left_click(self):
-    source_click(self, "Build")
-
-def right_click(self):
     source_click(self, "Mine")
 
+def right_click(self):
+    source_click(self, "Build")
+    
 def middle_click(self):
     pass
 
@@ -42,10 +44,11 @@ def middle_hold(self):
     pass
 
 def left_release(self):
-        pass
+    if self.action.m_name == "Mine":
+        self.action_trigger = "Cancel"
 
 def right_release(self):
-    if self.action.m_name == "Mine":
+    if self.action.m_name == "Build":
         self.action_trigger = "Cancel"
 
 def middle_release(self):

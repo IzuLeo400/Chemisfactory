@@ -4,6 +4,7 @@ import pygame
 from scripts.constants import Constants
 from scripts.entities import mouse_commands
 from scripts.entities.action import Action
+from scripts.entities.player_actions.build import Build
 from scripts.entities.player_actions.mine import Mine
 from scripts.tiles.sources import Source
 from scripts.entities.entity import PhysicsEntity
@@ -38,6 +39,7 @@ class Player(PhysicsEntity):
         self.click_type = [False, False, False]
         #Add player specific action to the possible actions
         self.entity_actions["Mine"] = Mine(self, self.ui)
+        self.entity_actions["Build"] = Build(self, self.ui)
 
 
     def update_movement(self, movement=(0, 0, 0, 0)):
@@ -79,9 +81,10 @@ class Player(PhysicsEntity):
         """
         self.last_click_type = self.click_type
         self.click_type = self.mouse.get_pressed()
-        self.update_mouse_button(0, mouse_commands.left_click, mouse_commands.left_hold, mouse_commands.left_release)
+        # print(f"self.click_type: {self.click_type}, self.last_click_type: {self.last_click_type}")
+        self.update_mouse_button(2, mouse_commands.left_click, mouse_commands.left_hold, mouse_commands.left_release)
         self.update_mouse_button(1, mouse_commands.middle_click, mouse_commands.middle_hold, mouse_commands.middle_release)
-        self.update_mouse_button(2, mouse_commands.right_click, mouse_commands.right_hold, mouse_commands.right_release)
+        self.update_mouse_button(0, mouse_commands.right_click, mouse_commands.right_hold, mouse_commands.right_release)
     
     def update_mouse_button(self, button_idx, on_click=None, on_hold=None, on_release=None, on_false=None):
         """
@@ -128,6 +131,9 @@ class Player(PhysicsEntity):
         if self.action_trigger == "Mine":
             self.action_trigger = None
             self.set_action("Mine")  
+        if self.action_trigger == "Build":
+            self.action_trigger = None
+            self.set_action("Build")  
         # print(f"self.action_trigger: {self.action_trigger}, self.action.name: {self.action.m_name}")
         
         if abs(self.x_movement) > 0:
@@ -145,7 +151,7 @@ class Player(PhysicsEntity):
                 self.set_direction("w")
                 self.set_action("Walk")
         else:
-            if self.action.m_name == "Mine":
+            if self.action.m_name == "Mine" or self.action.m_name == "Build":
                 return
             self.set_action("Idle")      
         

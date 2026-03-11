@@ -48,6 +48,12 @@ class Game:
                     "d": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 1), area=(4, 1), tile_size=32), img_dur=12),
                     "w": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 2), area=(4, 1), tile_size=32), img_dur=12),
                     "a": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 1), area=(4, 1), tile_size=32, flipped=True), img_dur=12),
+                },
+                "Build": {
+                    "s": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32), img_dur=12),
+                    "d": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32), img_dur=12),
+                    "w": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32), img_dur=12),
+                    "a": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32, flipped=True), img_dur=12),
                 }
             },
             "UI":{
@@ -73,8 +79,12 @@ class Game:
                 },
                 "ProgressBar":{
                     "Mine": {
-                        None: load_image('UI/emptyProgressBar.png'),
-                        "full": load_image('UI/fullProgressBar.png'),
+                        None: load_image('UI/emptyMine.png'),
+                        "full": load_image('UI/fullMine.png'),
+                    },
+                    "Build": {
+                        None: load_image('UI/emptyBuild.png'),
+                        "full": load_image('UI/fullBuild.png'),
                     },
                 }, 
             },

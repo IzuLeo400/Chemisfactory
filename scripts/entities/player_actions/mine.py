@@ -16,6 +16,9 @@ class Mine(ProgressAction):
         super().__init__(player, "Mine", ui)
         self.source = None
 
+    def set_item(self, item):
+        pass
+
     def set_source(self, source):
         self.source = source
         self.speed = source.mining_speed

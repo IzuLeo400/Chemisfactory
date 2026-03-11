@@ -1,8 +1,11 @@
 import pygame
 
+from scripts.tiles.structures.structure import Structure
+
 
 class Cursor:
-  def __init__(self, mouse, img, tile_size):
+  def __init__(self, ui, mouse, img, tile_size):
+    self.ui = ui
     self.mouse = mouse
     self.img = img
     self.tile_size = tile_size
@@ -27,9 +30,10 @@ class Cursor:
     self.x = (mouse_pose[0] + offset[0]) // self.tile_size
     self.y = (mouse_pose[1] + offset[1]) // self.tile_size
     
-
   def render(self, surface, offset=(0, 0)):
     if not self.mouse.over_ui():
+      if self.ui.manager.get_selected_item() is not None and issubclass(self.ui.manager.get_selected_item().__class__, Structure):
+        surface.blit(self.ui.manager.get_selected_item().img, (self.x * self.tile_size - offset[0], self.y * self.tile_size - offset[1]))
       surface.blit(self.img, (self.x * self.tile_size - offset[0], self.y * self.tile_size - offset[1]))
 
 class Mouse:

@@ -12,18 +12,22 @@ class Build(ProgressAction):
     :param player: the player preforming the action
     :param ui: The UI class for the whole game to make and destroy the ui elements accompanying the building
     """
-    def __init__(self, player, ui, structure):
+    def __init__(self, player, ui):
         super().__init__(player, "Build", ui)
         self.source = None
+        self.structure = None
+    
+    def set_item(self, structure):
         self.structure = structure
-
+        self.speed = structure.build_speed 
+        self.difficulty = structure.build_difficulty 
+        
     def set_source(self, source):
         self.source = source
-        self.speed = source.mining_speed * 2
-        self.difficulty = source.difficulty * 3
 
     def end(self, interrupted):
         if not interrupted:
             self.source.add_miner(self.structure.img)
+            self.ui.remove_item()
         super().end(interrupted)
         

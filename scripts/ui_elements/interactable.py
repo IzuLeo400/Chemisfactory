@@ -54,6 +54,7 @@ class InteractableManager(Manager):
         self.selected_tile = tile
         self.ui.manager.set_selected_tile(tile)
         self.ui.manager.set_interactable(self.interactable)
+        self.ui.manager.set_selected_item(self.interactable.items[tile].get_item())
     
     def get_selected_tile(self) -> tuple[int, int]:
         return self.selected_tile

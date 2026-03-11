@@ -42,6 +42,7 @@ class PhysicsEntity:
         :param action: -- String -- the key to the entity_actions dictionary (ie: "Idle")
         """
         if action != self.action.m_name:
+            print(f"Changing action from {self.action.m_name} to {action}")
             self.action.end(interrupted=True)
             self.action = self.entity_actions[action]
             self.action.start()
