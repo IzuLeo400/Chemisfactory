@@ -19,8 +19,16 @@ class Build(ProgressAction):
     
     def set_item(self, structure):
         self.structure = structure
-        self.speed = structure.build_speed 
-        self.difficulty = structure.build_difficulty 
+        if structure is not None:
+            self.speed = structure.build_speed 
+            self.difficulty = structure.build_difficulty 
+
+    def start(self):
+        if self.structure is not None:
+            return super().start()
+        else:
+            self.end(True)
+            return False
         
     def set_source(self, source):
         self.source = source
@@ -29,5 +37,7 @@ class Build(ProgressAction):
         if not interrupted:
             self.source.add_miner(self.structure.img)
             self.ui.remove_item()
-        super().end(interrupted)
+            if self.ui.manager.get_selected_item() is None:
+                return super().end(True)
+        return super().end(interrupted)
         

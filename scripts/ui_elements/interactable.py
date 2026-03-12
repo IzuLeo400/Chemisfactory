@@ -86,6 +86,8 @@ class InteractableSlot:
     def empty(self):
         self.item = None
         self.quantity = None
+        if self.manager.get_selected_tile is not (None, None):
+            self.manager.ui.manager.set_selected_item(None)
 
     def subtract(self, quantity):
         if self.quantity <= quantity:

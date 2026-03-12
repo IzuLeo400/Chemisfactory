@@ -4,7 +4,6 @@ from scripts.constants import Constants
 from scripts.tiles.sources import Source
 
 def source_click(self, action):
-    print(f"source_click with action: {action}")
     if issubclass(self.hover_tile.__class__, Source):
         if self.hover_tile.in_range(self.center_pose(), depth=1):
                 self.action_trigger = action

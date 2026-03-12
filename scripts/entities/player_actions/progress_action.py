@@ -15,8 +15,9 @@ class ProgressAction(Action):
     def start(self):
         self.progress = 0 #full bar is at source.difficulty, this is used to determine how long it takes to mine the source
         self.progressBar = unInteractable("progressBar", self.ui, self.ui.assets["ProgressBar"][self.m_name], 16,
-                             (Constants.screen_width/4 - self.source.difficulty/2*16, Constants.screen_height/4 - 1/2*16 + Constants.progress_bar_y_offset), 
-                             (self.source.difficulty, 1), is_open=True, border_color=(255, 225, 0))
+                             (Constants.screen_width/4 - self.difficulty/2*16, Constants.screen_height/4 - 1/2*16 + Constants.progress_bar_y_offset), 
+                             (self.difficulty, 1), is_open=True, border_color=(255, 225, 0))
+        return True
         
     def update(self):
         #Update the uninteractable from here to make it seem like the player is doing something
@@ -27,10 +28,16 @@ class ProgressAction(Action):
             self.progressBar.items[(int(self.progress), 0)].item = Item("progressbar", (int(self.progress), 0), 16, self.ui.assets["ProgressBar"][self.m_name]["full"])
 
     def end(self, interrupted):
-        if interrupted:
-            self.progressBar.delete()
-            self.progressBar = None
+        if self.progressBar is not None:
+            if interrupted:
+                self.progressBar.delete()
+                self.progressBar = None
+                self.m_entity.action_trigger = "Cancel"
+                return False
+            else:
+                self.progressBar.reset()
+                self.progress = 0 
+                return True
         else:
-            self.progressBar.reset()
-            self.progress = 0
-        
+            self.m_entity.action_trigger = "Cancel"
+            return False

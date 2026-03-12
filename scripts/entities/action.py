@@ -23,16 +23,19 @@ class Action():
 
     def start(self):
         if self.m_start is None:
-            return
-        self.m_start()
+            return True
+        self.m_start(self)
+        return True
 
     def update(self):
         if self.m_update is None:
-            return
-        self.m_update()
+            return True
+        self.m_update(self)
+        return True
 
     def end(self, interrupted):
         if self.m_end is None:
-            return
-        self.m_end(interrupted)
+            return True
+        self.m_end(self, interrupted)
+        return True
 
