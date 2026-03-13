@@ -24,7 +24,7 @@ class ProgressAction(Action):
         self.progress += self.speed / 60
         if self.progress >= self.difficulty:
             self.end(False)
-        if self.progressBar.items[(int(self.progress), 0)].item is None:
+        elif self.progressBar.items[(int(self.progress), 0)].item is None:
             self.progressBar.items[(int(self.progress), 0)].item = Item("progressbar", (int(self.progress), 0), 16, self.ui.assets["ProgressBar"][self.m_name]["full"])
 
     def end(self, interrupted):

@@ -72,7 +72,7 @@ class Player(PhysicsEntity):
         self.update_mouse_input()
 
         self.action.update()
-
+        
         self.update_animations()
 
     def update_mouse_input(self):

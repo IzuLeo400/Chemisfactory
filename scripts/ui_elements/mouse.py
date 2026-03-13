@@ -27,8 +27,9 @@ class Cursor:
   def update(self, offset=(0, 0)):
     mouse_pose = self.mouse.get_pose()
     mouse_pose = (mouse_pose[0]//2, mouse_pose[1]//2)
-    self.x = (mouse_pose[0] + offset[0]) // self.tile_size
-    self.y = (mouse_pose[1] + offset[1]) // self.tile_size
+    if not self.ui.game.player.action.m_name == "Build" and not self.ui.game.player.action.m_name == "Mine":
+      self.x = (mouse_pose[0] + offset[0]) // self.tile_size
+      self.y = (mouse_pose[1] + offset[1]) // self.tile_size
     
   def render(self, surface, offset=(0, 0)):
     if not self.mouse.over_ui():
