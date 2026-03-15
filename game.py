@@ -1,5 +1,6 @@
 import pygame
 
+from scripts.tiles.structures.belt import Belt
 from scripts.tiles.structures.miner import Miner
 from scripts.tiles.item import Item
 from scripts.ui_elements.inputs import Input
@@ -109,10 +110,8 @@ class Game:
 
         self.ui = UI(self, self.assets["UI"], self.input, Constants.inventory_tile_size)
 
-        # self.ui.inventory.items[(0, 0)].set_item(Item("Iron", (0, 0), 16, self.assets["Items"]["Iron"]), 6)
-        # self.ui.inventory.items[(1, 0)].set_item(Item("Hydrogen", (0, 1), 16, self.assets["Items"]["Hydrogen"]), 7)
-        # self.ui.inventory.items[(0, 1)].set_item(Item("Oxygen", (1, 0), 16, self.assets["Items"]["Oxygen"]), 9)
-        self.ui.hotbar.items[(0, 0)].set_item(Miner((0, 0), Constants.tile_size, self.assets["Structures"]["Miner"], None), 1)
+        self.ui.hotbar.items[(0, 0)].set_item(Miner((0, 0), Constants.tile_size, self.assets["Structures"]["Miner"], None), 2)
+        #self.ui.hotbar.items[(0, 0)].set_item(Belt((0, 0), Constants.tile_size, self.assets["Structures"]["Belt"], None), 1)
 
         self.player = Player(self, (0, 0), (6, 6), (13, 16))
         
@@ -123,7 +122,7 @@ class Game:
     def game_loop(self):
         self.display.blit(self.assets["Background"], (0, 0))
 
-        self.input.update_keyboard()
+        self.input.update()
 
         self.player.update_movement(self.input.movement)
 
@@ -134,7 +133,7 @@ class Game:
         render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
 
         self.ui.update(render_scroll)
-
+        
         self.player.update_actions()
 
         self.tilemap.render(self.display, render_scroll)

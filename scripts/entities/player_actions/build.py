@@ -35,11 +35,7 @@ class Build(ProgressAction):
 
     def end(self, interrupted):
         if not interrupted:
-            print("adding miner to source")
             self.source.add_miner(self.structure.img)
             self.ui.remove_item()
-            if self.ui.manager.get_selected_item() is None:
-                print("no more items")
-                return super().end(True)
-        return super().end(interrupted)
+        return super().end(True)
         

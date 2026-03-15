@@ -1,7 +1,26 @@
 import sys
 import pygame
 
+class Keyboard:
+    def __init__(self):
+        self.keys_pressed = [False] * 26
 
+    def update(self, events):
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key >= pygame.K_a and event.key <= pygame.K_z:
+                    self.keys_pressed[event.key - pygame.K_a] = True
+            if event.type == pygame.KEYUP:
+                if event.key >= pygame.K_a and event.key <= pygame.K_z:
+                    self.keys_pressed[event.key - pygame.K_a] = False
+
+    def get_keys_pressed(self) -> list[bool]:
+        return self.keys_pressed
+    
+    def keypress(self, idx, ui):
+        print(f"Key {idx} pressed")
+        pass
+    
 class Input:
     def __init__(self, mouse):
         self.mouse = mouse
@@ -9,6 +28,10 @@ class Input:
         self.movement = [False, False, False, False]
         #               1      2      3      4      5      6      7      8      9      0      Tab
         self.hotkeys = [False, False, False, False, False, False, False, False, False, False, False]
+
+        self.keyboard = Keyboard()
+
+        self.events = None
 
     def get_movement_keys(self) -> list[bool, bool, bool, bool]:
         return self.movement
@@ -19,8 +42,15 @@ class Input:
     def update_mouse(self):
         self.mouse.update()
 
+    def get_keyboard(self):
+        return self.keyboard.get_keys_pressed()
+    
     def update_keyboard(self):
-        for event in pygame.event.get():
+        self.keyboard.update(self.events)
+
+    def update(self):
+        self.events = pygame.event.get()
+        for event in self.events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -56,6 +86,7 @@ class Input:
                     self.hotkeys[9] = True
                 if event.key == pygame.K_TAB:
                     self.hotkeys[10] = True
+
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_d:
                     self.movement[0] = False

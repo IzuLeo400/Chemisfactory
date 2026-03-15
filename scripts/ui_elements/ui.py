@@ -59,6 +59,13 @@ class UI:
         self.input.update_mouse()
         self.cursor.update(offset)
 
+        last_keyboard = self.input.get_keyboard()
+        self.input.update_keyboard()      
+        keyboard = self.input.get_keyboard()
+        for idx in range(keyboard.__len__()):
+            if keyboard[idx] and not last_keyboard[idx]:
+                self.input.keyboard.keypress(idx, self)
+
         order_copy = self.render_order.copy()
         order_copy.reverse()
 
