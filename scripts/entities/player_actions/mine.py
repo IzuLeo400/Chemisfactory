@@ -2,6 +2,7 @@ from scripts.constants import Constants
 from scripts.entities.action import Action
 from scripts.entities.player_actions.progress_action import ProgressAction
 from scripts.tiles.item import Item
+from scripts.tiles.sources import Source
 from scripts.ui_elements.uninteractable import unInteractable
 from scripts.ui_elements.window import Window
 
@@ -14,18 +15,22 @@ class Mine(ProgressAction):
     """
     def __init__(self, player, ui):
         super().__init__(player, "Mine", ui)
-        self.source = None
+        self.source: Source | None = None
 
-    def set_item(self, item):
+    def set_action_item(self, item):
         pass
 
-    def set_source(self, source):
+    def set_action_source(self, source):
         self.source = source
         self.speed = source.mining_speed
         self.difficulty = source.difficulty
 
-    def end(self, interrupted):
+    def end(self, interrupted) -> bool:
         if not interrupted:
-            self.ui.add_item(self.source.item)
-        super().end(interrupted)
+            if self.source != None:
+                self.ui.add_item(self.source.item)
+            else:
+                self.m_entity.action_trigger = "Cancel"
+                return super().end(True)
+        return super().end(interrupted)
         

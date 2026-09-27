@@ -18,7 +18,7 @@ class Keyboard:
         return self.keys_pressed
     
     def keypress(self, idx, ui):
-        print(f"Key {idx} pressed")
+        #print(f"Key {idx} pressed")
         pass
     
 class Input:
@@ -33,10 +33,12 @@ class Input:
 
         self.events = None
 
-    def get_movement_keys(self) -> list[bool, bool, bool, bool]:
+    def get_movement_keys(self) -> list[bool]:
+        """Returns a list of booleans representing the state of movement keys: [D, A, S, W]"""
         return self.movement
     
-    def get_hotkeys(self) -> list[bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool]:
+    def get_hotkeys(self) -> list[bool]:
+        """Returns a list of booleans representing the state of hotkeys: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, Tab]"""
         return self.hotkeys
 
     def update_mouse(self):
@@ -45,7 +47,7 @@ class Input:
     def get_keyboard(self):
         return self.keyboard.get_keys_pressed()
     
-    def update_keyboard(self):
+    def update_keyboard(self) -> None:
         self.keyboard.update(self.events)
 
     def update(self):

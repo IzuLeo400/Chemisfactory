@@ -1,3 +1,6 @@
+from typing import Literal
+
+
 class Action():
     """
     The abstract class for an action preformed by an entity \n Arguments:
@@ -21,19 +24,18 @@ class Action():
         self.m_update = update
         self.m_end = end
 
-    def start(self):
+    def start(self) -> bool:
         if self.m_start is None:
             return True
-        self.m_start(self)
-        return True
+        return self.m_start(self)
 
-    def update(self):
+    def update(self) -> bool:
         if self.m_update is None:
             return True
         self.m_update(self)
         return True
 
-    def end(self, interrupted):
+    def end(self, interrupted) -> bool:
         if self.m_end is None:
             return True
         self.m_end(self, interrupted)

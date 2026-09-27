@@ -8,7 +8,7 @@ class Manager:
         self.window_drag = False
         self.drag_pose = (None, None)
 
-    def initiate_window_drag(self, mouse_pose):
+    def initiate_window_drag(self, mouse_pose, type=None):
         self.window_drag = True
         self.drag_pose = mouse_pose
 
@@ -20,10 +20,13 @@ class Manager:
             return True
         return False
     
+    def get_drag_type(self) -> str | None:
+        return None
+    
     def set_drag_pose(self, pose):
         self.drag_pose = pose
 
-    def get_drag_pose(self) -> tuple[int, int]:
+    def get_drag_pose(self) -> tuple[int, int] | tuple[None, None]:
         return self.drag_pose
     
     def dragging(self) -> bool:
@@ -160,9 +163,9 @@ class Window:
                            self.size[1]+self.border*(top_border/border)))
         outline.fill(self.border_color)
         surface.blit(outline, (self.x - self.border, self.y - self.top_border))
-        if self.img is not None:
+        if self.img != None:
             surface.blit(self.img, (self.x, self.y))
         if self.exit:
             surface.blit(self.assets["exit"],
-                        (self.x + self.tile_size * (self.size[0] - 1),
+                        (self.x + Constants.tile_size * (self.size[0] - 1),
                         self.y - self.top_border + self.border/2))

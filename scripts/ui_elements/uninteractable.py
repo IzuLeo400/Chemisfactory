@@ -13,9 +13,6 @@ class unInteractableManager(Manager):
     def get_global_selected_tile(self) -> tuple[int, int]:
         return self.ui.manager.get_selected_tile()
     
-    def same_interactable(self) -> bool:
-        return self.interactable == self.ui.manager.get_interactable()
-    
     def get_tile_size(self) -> int:
         return self.uninteractable.tile_size
 
@@ -36,11 +33,12 @@ class unInteractableSlot:
         tile_difference = (self.tile_size - self.manager.get_tile_size())//2
         base_img = self.assets[None]
         surface.blit(base_img, location)
-        if self.item is not None:
+        if self.item != None:
             self.render_item(surface, (location[0] + tile_difference, location[1] + tile_difference))
 
     def render_item(self, surface, location):
-        self.item.render(surface, location, tilemap=False)
+        if self.item != None:
+            self.item.render(surface, location, tilemap=False)
 
 class unInteractable(Window):
     def __init__(self, id, ui, assets, tile_size, pose=(0, 0), size=(0, 0), border=1, top_border=1, draggable=False, exit=False, is_open=False, border_color=((30, 30, 30))):

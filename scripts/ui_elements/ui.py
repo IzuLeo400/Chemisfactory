@@ -1,3 +1,5 @@
+from scripts.exceptions.InventoryItemManagementError import InventoryItemManagementError
+from scripts.ui_elements.inputs import Input
 from scripts.ui_elements.interactable import Interactable
 from scripts.ui_elements.hotbar import Hotbar
 from scripts.ui_elements.inventory import Inventory
@@ -22,18 +24,18 @@ class Manager():
     def set_interactable(self, interactable):
         self.interactable = interactable
 
-    def get_interactable(self) -> Interactable:
+    def get_interactable(self) -> Interactable | None:
         return self.interactable
     
     def set_selected_item(self, item):
         self.selected_item = item
 
-    def get_selected_item(self) -> Item:
+    def get_selected_item(self) -> Item | None:
         return self.selected_item
 
 class UI:
     def __init__(self, game, assets, input, tile_size):
-        self.input = input
+        self.input: Input = input
         self.game = game
         self.assets = assets
         self.tile_size = tile_size
@@ -59,7 +61,7 @@ class UI:
         self.input.update_mouse()
         self.cursor.update(offset)
 
-        last_keyboard = self.input.get_keyboard()
+        last_keyboard = self.input.get_keyboard().copy()
         self.input.update_keyboard()      
         keyboard = self.input.get_keyboard()
         for idx in range(keyboard.__len__()):
@@ -98,12 +100,12 @@ class UI:
         name = item.name
         for inventory_slot in self.hotbar.items:
             item_check = self.hotbar.items[inventory_slot].get_item()
-            if item_check is not None and item_check.name == name:
+            if item_check != None and item_check.name == name:
                 self.hotbar.items[inventory_slot].add_item()
                 return 
         for inventory_slot in self.inventory.items:
             item_check = self.inventory.items[inventory_slot].get_item()
-            if item_check is not None and item_check.name == name:
+            if item_check != None and item_check.name == name:
                 self.inventory.items[inventory_slot].add_item()
                 return 
         for inventory_slot in self.hotbar.items:
@@ -119,4 +121,7 @@ class UI:
         
     def remove_item(self):
         interactable = self.manager.get_interactable()
-        interactable.items[interactable.manager.get_selected_tile()].subtract(1)
+        if interactable:
+            interactable.items[interactable.manager.get_selected_tile()].subtract(1)
+        else:
+            raise InventoryItemManagementError("No interactable is currently selected for item removal.")

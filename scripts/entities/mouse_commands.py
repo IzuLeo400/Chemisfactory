@@ -18,8 +18,8 @@ def source_click(self, action):
                         self.direction = "w"
                     else:
                         self.direction = "s"
-                self.entity_actions[action].set_source(self.hover_tile)
-                self.entity_actions[action].set_item(self.ui.manager.get_selected_item())
+                self.entity_actions[action].set_action_source(self.hover_tile)
+                self.entity_actions[action].set_action_item(self.ui.manager.get_selected_item())
         else:
             #Player clicked on source but was too far away
             pass

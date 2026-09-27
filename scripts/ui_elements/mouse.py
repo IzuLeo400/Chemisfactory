@@ -33,7 +33,7 @@ class Cursor:
     
   def render(self, surface, offset=(0, 0)):
     if not self.mouse.over_ui():
-      if self.ui.manager.get_selected_item() is not None and issubclass(self.ui.manager.get_selected_item().__class__, Structure):
+      if self.ui.manager.get_selected_item() != None and issubclass(self.ui.manager.get_selected_item().__class__, Structure):
         surface.blit(self.ui.manager.get_selected_item().img, (self.x * self.tile_size - offset[0], self.y * self.tile_size - offset[1]))
       surface.blit(self.img, (self.x * self.tile_size - offset[0], self.y * self.tile_size - offset[1]))
 

@@ -36,13 +36,13 @@ class Source(Tile):
         super().render(surface, offset)
 
 class Hydrogen(Source):
-    def __init__(self, pos, img, size=16, game=None):
+    def __init__(self, pos, img, size, game):
         super().__init__(pos, size, img, solid=False, mining_speed=2, difficulty=3, item=Item("Hydrogen", img=game.assets["Items"]["Hydrogen"]))
 
 class Oxygen(Source):
-    def __init__(self, pos, img, size=16, game=None):
+    def __init__(self, pos, img, size, game):
         super().__init__(pos, size, img, solid=False, mining_speed=3, difficulty=5, item=Item("Oxygen", img=game.assets["Items"]["Oxygen"]))
 
 class Iron(Source):
-    def __init__(self, pos, img, size=16, game=None):
+    def __init__(self, pos, img, size, game):
         super().__init__(pos, size, img, solid=True, mining_speed=1, difficulty=7, item=Item("Iron", img=game.assets["Items"]["Iron"]))

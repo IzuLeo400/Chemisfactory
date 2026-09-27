@@ -1,4 +1,5 @@
 import pygame
+from scripts.exceptions.InventoryItemManagementError import InventoryItemManagementError
 from scripts.tiles.item import Item
 from scripts.ui_elements.window import Manager, Window
 from scripts.constants import Constants
@@ -14,8 +15,8 @@ class InteractableManager(Manager):
         self.drag_quantity = 0
         self.type = None
 
-    def initiate_window_drag(self, mouse_pose, type):
-        super().initiate_window_drag(mouse_pose)
+    def initiate_window_drag(self, mouse_pose, type=None):
+        super().initiate_window_drag(mouse_pose, type)
         self.type = type
 
     def end_window_drag(self):
@@ -44,10 +45,10 @@ class InteractableManager(Manager):
             return True
         return False
 
-    def get_drag_quantity(self) -> bool:
+    def get_drag_quantity(self) -> int | None:
         return self.drag_quantity
 
-    def get_drag_type(self) -> str:
+    def get_drag_type(self) -> str | None:
         return self.type
     
     def set_selected_tile(self, tile):
@@ -56,7 +57,7 @@ class InteractableManager(Manager):
         self.ui.manager.set_interactable(self.interactable)
         self.ui.manager.set_selected_item(self.interactable.items[tile].get_item())
     
-    def get_selected_tile(self) -> tuple[int, int]:
+    def get_selected_tile(self) -> tuple[int, int] | tuple[None, None]:
         return self.selected_tile
     
     def dragging(self) -> bool:
@@ -86,30 +87,35 @@ class InteractableSlot:
     def empty(self):
         self.item = None
         self.quantity = None
-        if self.manager.get_selected_tile is not (None, None):
+        if self.manager.selected_tile != (None, None):
             self.manager.ui.manager.set_selected_item(None)
 
     def subtract(self, quantity):
-        if self.quantity <= quantity:
+        if self.quantity < quantity:
+            raise InventoryItemManagementError(f"Cannot subtract {quantity} from slot with only {self.quantity} items.")
+        if self.quantity == quantity:
             self.empty()
         else:
             self.quantity -= quantity
 
-    def get_item(self) -> Item:
+    def get_item(self) -> Item | None:
         return self.item
 
     def set_item(self, item, quantity=1):
         self.item = item
         self.quantity = quantity
 
-    def get_quantity(self) -> int:
+    def get_quantity(self) -> int | None:
         return self.quantity
 
     def set_quantity(self, quantity):
         self.quantity = quantity
 
     def add_item(self):
-        self.set_quantity(self.quantity + 1)
+        if self.quantity != None:
+            self.set_quantity(self.quantity + 1)
+        else:
+            raise InventoryItemManagementError("Cannot add item to slot without a defined quantity.")
 
     def is_empty(self) -> bool:
         return self.item == None
@@ -124,7 +130,7 @@ class InteractableSlot:
         else:
             base_img = self.assets[None]
         surface.blit(base_img, location)
-        if self.item is not None:
+        if self.item != None:
             if selected:
                 if self.manager.get_drag_quantity() < self.quantity:
                     self.render_item(surface, (location[0] + tile_difference, location[1] + tile_difference))
@@ -136,10 +142,16 @@ class InteractableSlot:
             else:
                 self.render_item(surface, (location[0] + tile_difference, location[1] + tile_difference))
                 self.render_text(surface, self.quantity, (location[0]+1, location[1]+1))
+        else:
+            "Empty slot, no item to render"
+            pass
 
     def render_item(self, surface, location):
-        self.item.render(surface, location, tilemap=False)
-            
+        if self.item != None:
+            self.item.render(surface, location, tilemap=False)
+        else:
+            raise InventoryItemManagementError("Cannot render item in slot without an item assigned.")
+
     def render_text(self, surface, quantity, location):
         self.text.box_render(str(quantity), surface, location)
 
@@ -251,12 +263,12 @@ class Interactable(Window):
                 return True
         return False
     
-    def inventory_click(self, mouse_pose, type):
+    def inventory_click(self, mouse_pose, type=None):
         self.prioritize_render()
         idx = ((mouse_pose[0]-self.x)//self.tile_size, (mouse_pose[1]-self.y)//self.tile_size)
         if idx in self.items:
             self.manager.set_selected_tile(idx)
-            if self.items[idx].get_item() is not None:
+            if self.items[idx].get_item() != None:
                 if type == "left":
                     self.manager.initiate_item_drag(mouse_pose, self.items[idx].get_quantity(), type)
                 if type == "right":
@@ -269,7 +281,8 @@ class Interactable(Window):
                         quantity = quantity//2
                     self.manager.initiate_item_drag(mouse_pose, quantity, type)
         else: 
-            super().inventory_click(mouse_pose, type)
+            if type != None:
+                super().inventory_click(mouse_pose, type)
 
     def render(self, surface):
         outline = pygame.Surface((self.size[0]*self.tile_size+self.border*2,

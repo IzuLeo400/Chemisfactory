@@ -94,21 +94,21 @@ class Player(PhysicsEntity):
         :param on_click: -- method -- Ran when the button is first pressed
         :param on_hold: -- method -- Ran while the button is held
         :param on_release: -- method -- Ran when the button is released
-        :param on_false: -- method -- Ran while the button is not pressed
+        :param on_false: -- method -- Ran while the button != pressed
         """
         if self.click_type[button_idx]:
             if self.last_click_type[button_idx]:
-                if on_hold is not None:
+                if on_hold != None:
                     on_hold(self)
             else:
-                if on_click is not None:
+                if on_click != None:
                     on_click(self)
         else:
             if self.last_click_type[button_idx]:
-                if on_release is not None:
+                if on_release != None:
                     on_release(self)
             else:
-                if on_false is not None:
+                if on_false != None:
                     on_false(self)
 
     def center_pose(self) -> tuple[float, float]:
