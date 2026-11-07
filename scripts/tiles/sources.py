@@ -30,17 +30,6 @@ class Source(Tile):
         self.mining_rotation = structure.rotation
         self.animation.blit(pygame.transform.rotate(structure.animation.img(), self.mining_rotation), (0, 0))
         self.mining = True
-        
-
-    def in_range(self, pose, depth=1):
-        if self.pos is not None:
-            x = self.pos[0] * self.size - pose[0] + Constants.tile_size / 2 
-            y = self.pos[1] * self.size - pose[1] + Constants.tile_size / 2 
-            if math.sqrt(x**2 + y**2) < depth * Constants.tile_size - 2:
-                return True
-        else:
-            raise UninitiatedValueError("Tile position is None, cannot check if tile is in range without a position.")
-        return False
     
     def render(self, surface, offset=(0, 0)):
         super().render(surface, offset)

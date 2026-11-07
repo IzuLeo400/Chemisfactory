@@ -91,6 +91,8 @@ class InteractableSlot:
             self.manager.ui.manager.set_selected_item(None)
 
     def subtract(self, quantity):
+        if self.quantity == None:
+            raise InventoryItemManagementError("Cannot subtract from slot without a defined quantity. (Quantity is None)")
         if self.quantity < quantity:
             raise InventoryItemManagementError(f"Cannot subtract {quantity} from slot with only {self.quantity} items.")
         if self.quantity == quantity:

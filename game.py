@@ -31,7 +31,7 @@ class Game:
                 },
                 "Structures": {
                     "Miner": Animation(load_tile_sheet('Tiles/Buldings/Miner.png')),
-                    "Belt": Animation(load_tile_sheet('Tiles/Buldings/Belt.png', start_pose=(0, 0), area=(1, 4), tile_size=16), img_dur=10),
+                    "Belt": Animation(load_tile_sheet('Tiles/Buldings/Belt.png', start_pose=(0, 0), area=(1, 4), tile_size=16), img_dur=20),
                 },
             },
             "Player": {

@@ -84,6 +84,9 @@ class Player(PhysicsEntity):
         self.last_click_type = self.click_type
         self.click_type = self.mouse.get_pressed()
         # print(f"self.click_type: {self.click_type}, self.last_click_type: {self.last_click_type}")
+        if (self.mouse.over_ui()):
+            #Mouse is over the UI so don't preform any player based actions 
+            return
         self.update_mouse_button(2, mouse_commands.left_click, mouse_commands.left_hold, mouse_commands.left_release)
         self.update_mouse_button(1, mouse_commands.middle_click, mouse_commands.middle_hold, mouse_commands.middle_release)
         self.update_mouse_button(0, mouse_commands.right_click, mouse_commands.right_hold, mouse_commands.right_release)

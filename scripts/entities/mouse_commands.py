@@ -4,6 +4,7 @@ from scripts.constants import Constants
 from scripts.tiles.sources import Source
 from scripts.tiles.structures.miner import Miner
 from scripts.tiles.structures.structure import Structure
+from scripts.tiles.tile import Tile
 
 def source_click(self, action):
     if issubclass(self.hover_tile.__class__, Source):
@@ -25,14 +26,18 @@ def source_click(self, action):
                         self.direction = "w"
                     else:
                         self.direction = "s"
+                        
                 self.entity_actions[action].set_location(self.hover_pose)
                 self.entity_actions[action].set_action_item(self.ui.manager.get_selected_item())
         else:
-            #Player clicked on source but was too far away
+            #Out of range to build or mine
             pass
 
 def off_source_build(self):
     item = self.ui.manager.get_selected_item()
+    if not Tile.in_range_static(self.hover_pose, self.center_pose(), depth=2):
+        #Out of range to build
+        return
     if item.__class__ == Miner:
         #Player is trying to build a miner off a source
         return

@@ -6,6 +6,7 @@ class Item(Tile):
         self.name = name
 
     def render(self, surface, offset=(0, 0), tilemap=False):
+        self.animation.update()
         surface.blit(self.animation.img(), (offset[0], offset[1]))
 
     def rotate(self):

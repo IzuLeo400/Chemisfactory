@@ -46,9 +46,9 @@ class Build(ProgressAction):
                     self.source.add_miner(self.structure)
                     self.ui.remove_item()
                 elif self.structure != None:
-                    print(f"Building {self.structure.name} at {self.location}")
-                    self.m_entity.tilemap.tilemap[(self.location)] = self.structure
+                    #print(f"Building {self.structure.name} at {self.location}")
                     self.structure.pos = self.location
+                    self.m_entity.tilemap.tilemap[(self.location)] = self.structure.copy()
                     self.ui.remove_item()
                 else:
                     return super().end(True)

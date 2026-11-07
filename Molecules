@@ -1,0 +1,58 @@
+Probably will eventuall turn this into a Json file with all the information but for now it is how I'm going to keep track of everything
+
+CHEMICAL COMPOUNDS AND MOLECULES CREATABLE WITH H, O, AND Fe
+===========================================================
+
+This document outlines various chemical molecules, ions, and network compounds that can be constructed using only Hydrogen (H), Oxygen (O), and Iron (Fe).
+
+1. MOLECULES CONTAINING ALL THREE ELEMENTS (Fe, O, H)
+-----------------------------------------------------
+* Fe(OH)2 (Iron(II) hydroxide)
+  - Description: Composed of one iron atom bonded to two hydroxyl (OH) groups. Forms a pale green solid when iron reacts in basic water solutions.
+
+* Fe(OH)3 (Iron(III) hydroxide)
+  - Description: Composed of one iron atom bonded to three hydroxyl groups. A major component of rust, forming a reddish-brown precipitate.
+
+* FeO(OH) (Iron(III) oxyhydroxide)
+  - Description: Contains an oxide oxygen and a hydroxyl group. Naturally occurs as minerals like goethite or lepidocrocite, which are primary components of rust.
+
+* Fe-OOH (Iron hydroperoxide intermediate)
+  - Description: A highly reactive molecular fragment or transition state often found in biochemistry and catalysis, such as within the active sites of iron-containing enzymes or during Fenton's reagent chemical reactions.
+
+
+2. REACTIVE RADICALS AND TRANSIENT COMPLEXES
+--------------------------------------------
+* FeO2+ (Ferryl ion / Oxoiron(IV) species)
+  - Description: A powerful, highly reactive intermediate where iron is doubly bonded to oxygen (Fe=O).
+
+* FeO2^2+ and FeO3^+ (Iron-peroxo and iron-superoxo complexes)
+  - Description: Transient complexes that form in solution when iron reacts with hydrogen peroxide.
+
+
+3. DUAL-ELEMENT COMPOUNDS (BINARIES)
+------------------------------------
+A. Iron & Oxygen (Fe + O)
+* FeO (Iron(II) oxide)
+  - Description: Known as wüstite, a black-colored mineral.
+
+* Fe2O3 (Iron(III) oxide)
+  - Description: Known as hematite, the primary ingredient in red rust.
+
+* Fe3O4 (Iron(II,III) oxide)
+  - Description: Known as magnetite, a naturally magnetic black mineral containing both oxidation states of iron.
+
+B. Hydrogen & Oxygen (H + O)
+* H2O (Water)
+  - Description: Consists of two hydrogen atoms covalently bonded to one oxygen atom.
+
+* H2O2 (Hydrogen peroxide)
+  - Description: A highly reactive molecule with an extra oxygen atom, commonly used as a cleaning oxidant.
+
+* HO* (Hydroxyl radical)
+  - Description: A highly reactive, short-lived neutral single-oxygen-single-hydrogen radical.
+
+C. Iron & Hydrogen (Fe + H)
+* FeH (Iron hydride)
+  - Description: A simple diatomic molecule. It is highly unstable under normal conditions but can be found in small amounts in extreme environments like stellar atmospheres.
+
+Google. (2026). Gemini (Nov 6 version) [Large language model]. google.com

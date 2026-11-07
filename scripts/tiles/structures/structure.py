@@ -12,6 +12,7 @@ class Structure(Item):
         self.source = source
 
     def render(self, surface, offset=(0, 0), tilemap=True):
+        self.animation.update()
         if self.source is not None:
             self.source.render(surface, offset)
         if self.pos is not None:
@@ -24,3 +25,10 @@ class Structure(Item):
             raise UninitiatedValueError("Tile position is None, cannot render tile without a position.")
         
         super().render(surface, offset)
+
+    def copy(self):
+        return Structure(self.name, self.pos, self.size, self.animation, self.build_speed, self.build_difficulty, self.rotation, self.source, self.solid)
+
+class StructureInputs():
+    def __init__(self, inputs):
+        self.inputs = inputs
