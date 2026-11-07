@@ -5,6 +5,7 @@ from scripts.constants import Constants
 from scripts.entities import mouse_commands
 from scripts.entities.action import Action
 from scripts.entities.player_actions.build import Build
+from scripts.entities.player_actions.deconstruct import Deconstruct
 from scripts.entities.player_actions.mine import Mine
 from scripts.tiles.sources import Source
 from scripts.entities.entity import PhysicsEntity
@@ -42,6 +43,7 @@ class Player(PhysicsEntity):
         #Add player specific action to the possible actions
         self.entity_actions["Mine"] = Mine(self, self.ui)
         self.entity_actions["Build"] = Build(self, self.ui)
+        self.entity_actions["Deconstruct"] = Deconstruct(self, self.ui)
 
 
     def update_movement(self, movement=(0, 0, 0, 0)):

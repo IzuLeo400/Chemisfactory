@@ -1,6 +1,8 @@
 from scripts.constants import Constants
 from scripts.entities.action import Action
 from scripts.tiles.item import Item
+from scripts.tiles.sources import Source
+from scripts.tiles.structures.structure import Structure
 from scripts.ui_elements.uninteractable import unInteractable
 from scripts.ui_elements.window import Window
 
@@ -11,6 +13,22 @@ class ProgressAction(Action):
         self.progressBar = None
         self.speed = speed
         self.difficulty = difficulty
+        self.source: Source | None = None
+        self.structure: Structure | None = None
+        self.location: tuple[int, int] | None = None
+
+    def set_location(self, location):
+        self.location = location
+        if location in self.m_entity.tilemap.tilemap:
+            tile = self.m_entity.tilemap.tilemap[location]
+            if issubclass(tile.__class__, Source):
+                self.source = tile
+                return True
+        self.source = None
+        return False
+
+    def set_action_item(self, structure):
+        pass
 
     def start(self) -> bool:
         self.progress = 0 #full bar is at source.difficulty, this is used to determine how long it takes to mine the source

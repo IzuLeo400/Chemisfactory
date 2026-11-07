@@ -13,12 +13,13 @@ class Tile:
         self.animation = animation
         self.rotation = rotation
 
-    def render(self, surface, offset=(0, 0)):
+    def render(self, surface, offset=(0, 0), img=None):
         self.animation.update()
         if self.pos is not None:
-            surface.blit(pygame.transform.rotate(self.animation.img(), self.rotation),
-                                    (self.pos[0] * self.size - offset[0],
-                                    self.pos[1] * self.size - offset[1]))
+            if img is None:
+                img = pygame.transform.rotate(self.animation.img(), self.rotation)
+            surface.blit(img,(self.pos[0] * self.size - offset[0],
+                            self.pos[1] * self.size - offset[1]))
         else:
             raise UninitiatedValueError("Tile position is None, cannot render tile without a position.")
 

@@ -17,19 +17,6 @@ class Mine(ProgressAction):
         super().__init__(player, "Mine", ui)
         self.source: Source | None = None
 
-    def set_action_item(self, item):
-        pass
-
-    def set_location(self, location):
-        self.source = self.m_entity.tilemap.tilemap[location]
-        if self.source != None:
-            self.speed = self.source.mining_speed
-            self.difficulty = self.source.difficulty
-        else:
-            self.m_entity.action_trigger = "Cancel"
-            self.end(True)
-            return False
-
     def end(self, interrupted) -> bool:
         if not interrupted:
             if self.source != None:

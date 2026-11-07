@@ -15,9 +15,7 @@ class Build(ProgressAction):
     """
     def __init__(self, player, ui):
         super().__init__(player, "Build", ui)
-        self.source: Source | None = None
-        self.structure: Structure | None = None
-        self.location: tuple[int, int] | None = None
+        
     
     def set_action_item(self, structure):
         self.structure = structure
@@ -32,12 +30,6 @@ class Build(ProgressAction):
             self.end(True)
             return False
         
-    def set_location(self, location):
-        self.location = location
-        if location in self.m_entity.tilemap.tilemap:
-            tile = self.m_entity.tilemap.tilemap[location]
-            if issubclass(tile.__class__, Source):
-                self.source = tile
 
     def end(self, interrupted):
         if not interrupted:

@@ -23,16 +23,22 @@ class Source(Tile):
         self.mining = False
         self.mining_rotation = 0
         self.mining_speed = mining_speed
+        self.miner_img = None
         self.difficulty = difficulty
         self.item = item
 
     def add_miner(self, structure):
         self.mining_rotation = structure.rotation
-        self.animation.blit(pygame.transform.rotate(structure.animation.img(), self.mining_rotation), (0, 0))
+        self.miner_img = pygame.transform.rotate(structure.animation.img(), self.mining_rotation)
         self.mining = True
+
+    def remove_miner(self):
+        self.mining = False
+        self.miner_img = None
     
-    def render(self, surface, offset=(0, 0)):
+    def render(self, surface, offset=(0, 0), img=None):
         super().render(surface, offset)
+        super().render(surface, offset, self.miner_img)
 
 class Hydrogen(Source):
     def __init__(self, pos, img, size, game):
