@@ -33,6 +33,8 @@ class Player(PhysicsEntity):
         self.tilemap = game.tilemap
         #Tile class -- the tile the cursor is currently over -- if not above tile then None
         self.hover_tile = None
+        #Tuple(int, int) -- the tile the cursor is currently over -- if not above tile then None
+        self.hover_pose = None
         #String -- queue the next action using either "cancel" or the key in the action dictionary
         self.action_trigger = None
         #Tuple(Bool, Bool, Bool) -- True when mouse button is pressed -- [Left, Middle, Right] -- Otherwise False
@@ -50,7 +52,7 @@ class Player(PhysicsEntity):
         """
         self.x_movement = (movement[0] - movement[1])
         self.y_movement = (movement[2] - movement[3])
-        #If moving diagonally then divide both by hypotenuse of desired movement triangle
+        #If moving diagonally then divide both by hypotenuse of desired movement triangle 
         if abs(self.x_movement) > 0 and abs(self.y_movement) > 0:
             self.x_movement /= math.sqrt(2)
             self.y_movement /= math.sqrt(2)
@@ -59,13 +61,13 @@ class Player(PhysicsEntity):
     def update_actions(self):
         """
         Updates the player regarding preformable actions \n
-        1 : Resets the hover tile \n
+        1 : Resets the hover tile (tile mouse is currently over) \n
         2 : Updates the mouse input \n
         3 : Updates the animations
         """
-        hover_pose = self.cursor.pose()
-        if hover_pose in self.tilemap.tilemap:
-            self.hover_tile = self.tilemap.tilemap[hover_pose]
+        self.hover_pose = self.cursor.pose()
+        if self.hover_pose in self.tilemap.tilemap:
+            self.hover_tile = self.tilemap.tilemap[self.hover_pose]
         else:
             self.hover_tile = None
         

@@ -125,3 +125,10 @@ class UI:
             interactable.items[interactable.manager.get_selected_tile()].subtract(1)
         else:
             raise InventoryItemManagementError("No interactable is currently selected for item removal.")
+
+    def keypress(self, idx):
+        match idx:
+            case 17: #R
+                selected_item = self.manager.get_selected_item()
+                if selected_item != None:
+                     selected_item.rotate() 

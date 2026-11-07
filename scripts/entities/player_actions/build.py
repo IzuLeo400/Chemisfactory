@@ -1,5 +1,3 @@
-from typing import Literal
-
 from scripts.constants import Constants
 from scripts.entities.action import Action
 from scripts.entities.player_actions.progress_action import ProgressAction
@@ -19,6 +17,7 @@ class Build(ProgressAction):
         super().__init__(player, "Build", ui)
         self.source: Source | None = None
         self.structure: Structure | None = None
+        self.location: tuple[int, int] | None = None
     
     def set_action_item(self, structure):
         self.structure = structure
@@ -33,16 +32,31 @@ class Build(ProgressAction):
             self.end(True)
             return False
         
-    def set_action_source(self, source):
-        self.source = source
+    def set_location(self, location):
+        self.location = location
+        if location in self.m_entity.tilemap.tilemap:
+            tile = self.m_entity.tilemap.tilemap[location]
+            if issubclass(tile.__class__, Source):
+                self.source = tile
 
     def end(self, interrupted):
         if not interrupted:
-            if self.source != None and self.structure != None:
-                self.source.add_miner(self.structure.img)
-                self.ui.remove_item()
+            if self.structure != None:
+                if self.source != None:
+                    self.source.add_miner(self.structure)
+                    self.ui.remove_item()
+                elif self.structure != None:
+                    print(f"Building {self.structure.name} at {self.location}")
+                    self.m_entity.tilemap.tilemap[(self.location)] = self.structure
+                    self.structure.pos = self.location
+                    self.ui.remove_item()
+                else:
+                    return super().end(True)
+                self.m_entity.action_trigger = "Cancel"
+                return super().end(False)
             else:
                 self.m_entity.action_trigger = "Cancel"
                 return super().end(True)
-        return super().end(True)
+        else:
+            return super().end(True)
         

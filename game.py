@@ -23,13 +23,16 @@ class Game:
         self.clock = pygame.time.Clock()
         
         self.assets = {
-            "Sources": {
-                "HydrogenSource": load_image('Tiles/Sources/HydrogenSource.png'),
-                "OxygenSource": load_image('Tiles/Sources/OxygenSource.png'),
-                "IronSource": load_image('Tiles/Sources/IronSource.png'),
-            },
             "Tiles": {
-                
+                "Sources": {
+                    "HydrogenSource": Animation(load_tile_sheet('Tiles/Sources/HydrogenSource.png')),
+                    "OxygenSource": Animation(load_tile_sheet('Tiles/Sources/OxygenSource.png')),
+                    "IronSource": Animation(load_tile_sheet('Tiles/Sources/IronSource.png')),
+                },
+                "Structures": {
+                    "Miner": Animation(load_tile_sheet('Tiles/Buldings/Miner.png')),
+                    "Belt": Animation(load_tile_sheet('Tiles/Buldings/Belt.png', start_pose=(0, 0), area=(1, 4), tile_size=16), img_dur=10),
+                },
             },
             "Player": {
                 "Idle": {
@@ -39,10 +42,10 @@ class Game:
                     "a": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 1), area=(2, 1), tile_size=32, flipped=True), img_dur=12),
                 },
                 "Walk": {
-                    "s": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 3), area=(4, 1), tile_size=32)),
-                    "d": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 4), area=(4, 1), tile_size=32)),
-                    "w": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 5), area=(4, 1), tile_size=32)),
-                    "a": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 4), area=(4, 1), tile_size=32, flipped=True)),
+                    "s": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 3), area=(4, 1), tile_size=32), img_dur=5),
+                    "d": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 4), area=(4, 1), tile_size=32), img_dur=5),
+                    "w": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 5), area=(4, 1), tile_size=32), img_dur=5),
+                    "a": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(0, 4), area=(4, 1), tile_size=32, flipped=True), img_dur=5),
                 },
                 "Mine": {
                     "s": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 0), area=(4, 1), tile_size=32), img_dur=12),
@@ -59,6 +62,7 @@ class Game:
             },
             "UI":{
                 "Cursor": load_image('UI/Cursor.png'),
+                "Arrow": load_image('UI/Arrow.png', rotation=-90),
                 "Inventory":
                 {
                     None: load_image('UI/hotbar.png'),
@@ -80,23 +84,20 @@ class Game:
                 },
                 "ProgressBar":{
                     "Mine": {
-                        None: load_image('UI/emptyMine.png'),
-                        "full": load_image('UI/fullMine.png'),
+                        None: Animation(load_tile_sheet('UI/emptyMine.png')),
+                        "full": Animation(load_tile_sheet('UI/fullMine.png')),
                     },
                     "Build": {
-                        None: load_image('UI/emptyBuild.png'),
-                        "full": load_image('UI/fullBuild.png'),
+                        None: Animation(load_tile_sheet('UI/emptyBuild.png')),
+                        "full": Animation(load_tile_sheet('UI/fullBuild.png')),
                     },
                 }, 
             },
             "Background": load_image('Background/background.jpg'),
-            "Structures": {
-                "Miner": load_image('Tiles/Buldings/Miner.png')
-            },
             "Items": {
-                "Hydrogen": load_image('Items/Hydrogen.png'),
-                "Oxygen": load_image('Items/Oxygen.png'),
-                "Iron": load_image('Items/Iron.png'),
+                "Hydrogen": Animation(load_tile_sheet('Items/Hydrogen.png')),
+                "Oxygen": Animation(load_tile_sheet('Items/Oxygen.png')),
+                "Iron": Animation(load_tile_sheet('Items/Iron.png')),
             }
         }
 
@@ -110,8 +111,8 @@ class Game:
 
         self.ui = UI(self, self.assets["UI"], self.input, Constants.inventory_tile_size)
 
-        self.ui.hotbar.items[(0, 0)].set_item(Miner((0, 0), Constants.tile_size, self.assets["Structures"]["Miner"], None), 2)
-        #self.ui.hotbar.items[(0, 0)].set_item(Belt((0, 0), Constants.tile_size, self.assets["Structures"]["Belt"], None), 1)
+        self.ui.hotbar.items[(0, 0)].set_item(Miner((0, 0), Constants.tile_size, self.assets["Tiles"]["Structures"]["Miner"], None), 2)
+        self.ui.hotbar.items[(1, 0)].set_item(Belt((0, 0), Constants.tile_size, self.assets["Tiles"]["Structures"]["Belt"]), 8)
 
         self.player = Player(self, (0, 0), (6, 6), (13, 16))
         

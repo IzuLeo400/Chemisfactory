@@ -20,10 +20,15 @@ class Mine(ProgressAction):
     def set_action_item(self, item):
         pass
 
-    def set_action_source(self, source):
-        self.source = source
-        self.speed = source.mining_speed
-        self.difficulty = source.difficulty
+    def set_location(self, location):
+        self.source = self.m_entity.tilemap.tilemap[location]
+        if self.source != None:
+            self.speed = self.source.mining_speed
+            self.difficulty = self.source.difficulty
+        else:
+            self.m_entity.action_trigger = "Cancel"
+            self.end(True)
+            return False
 
     def end(self, interrupted) -> bool:
         if not interrupted:

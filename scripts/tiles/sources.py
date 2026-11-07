@@ -1,5 +1,9 @@
 import math
+
+import pygame
 from scripts.constants import Constants
+from scripts.exceptions.UninitiatedValueError import UninitiatedValueError
+from scripts.sprites import Animation
 from scripts.tiles.item import Item
 from scripts.tiles.tile import Tile
 
@@ -17,19 +21,25 @@ class Source(Tile):
     def __init__(self, pos, size, img, solid=True, mining_speed=1, difficulty=5, item=None):
         super().__init__(pos, size, img, solid)
         self.mining = False
+        self.mining_rotation = 0
         self.mining_speed = mining_speed
         self.difficulty = difficulty
         self.item = item
 
-    def add_miner(self, img):
-        self.img.blit(img, (0, 0))
+    def add_miner(self, structure):
+        self.mining_rotation = structure.rotation
+        self.animation.blit(pygame.transform.rotate(structure.animation.img(), self.mining_rotation), (0, 0))
         self.mining = True
+        
 
     def in_range(self, pose, depth=1):
-        x = self.pos[0] * self.size - pose[0] + Constants.tile_size / 2 
-        y = self.pos[1] * self.size - pose[1] + Constants.tile_size / 2 
-        if math.sqrt(x**2 + y**2) < depth * Constants.tile_size - 2:
-            return True
+        if self.pos is not None:
+            x = self.pos[0] * self.size - pose[0] + Constants.tile_size / 2 
+            y = self.pos[1] * self.size - pose[1] + Constants.tile_size / 2 
+            if math.sqrt(x**2 + y**2) < depth * Constants.tile_size - 2:
+                return True
+        else:
+            raise UninitiatedValueError("Tile position is None, cannot check if tile is in range without a position.")
         return False
     
     def render(self, surface, offset=(0, 0)):
@@ -37,12 +47,11 @@ class Source(Tile):
 
 class Hydrogen(Source):
     def __init__(self, pos, img, size, game):
-        super().__init__(pos, size, img, solid=False, mining_speed=2, difficulty=3, item=Item("Hydrogen", img=game.assets["Items"]["Hydrogen"]))
+        super().__init__(pos, size, img, solid=False, mining_speed=2, difficulty=3, item=Item("Hydrogen", animation=game.assets["Items"]["Hydrogen"]))
 
 class Oxygen(Source):
     def __init__(self, pos, img, size, game):
-        super().__init__(pos, size, img, solid=False, mining_speed=3, difficulty=5, item=Item("Oxygen", img=game.assets["Items"]["Oxygen"]))
-
+        super().__init__(pos, size, img, solid=False, mining_speed=3, difficulty=5, item=Item("Oxygen", animation=game.assets["Items"]["Oxygen"]))
 class Iron(Source):
     def __init__(self, pos, img, size, game):
-        super().__init__(pos, size, img, solid=True, mining_speed=1, difficulty=7, item=Item("Iron", img=game.assets["Items"]["Iron"]))
+        super().__init__(pos, size, img, solid=True, mining_speed=1, difficulty=7, item=Item("Iron", animation=game.assets["Items"]["Iron"]))

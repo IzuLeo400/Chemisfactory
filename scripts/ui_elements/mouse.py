@@ -1,10 +1,14 @@
+import math
+
 import pygame
 
+from scripts.tiles.sources import Source
 from scripts.tiles.structures.structure import Structure
 
 
 class Cursor:
   def __init__(self, ui, mouse, img, tile_size):
+    self.arrow_img = ui.game.assets["UI"]["Arrow"]
     self.ui = ui
     self.mouse = mouse
     self.img = img
@@ -33,9 +37,26 @@ class Cursor:
     
   def render(self, surface, offset=(0, 0)):
     if not self.mouse.over_ui():
-      if self.ui.manager.get_selected_item() != None and issubclass(self.ui.manager.get_selected_item().__class__, Structure):
-        surface.blit(self.ui.manager.get_selected_item().img, (self.x * self.tile_size - offset[0], self.y * self.tile_size - offset[1]))
-      surface.blit(self.img, (self.x * self.tile_size - offset[0], self.y * self.tile_size - offset[1]))
+      x = self.x * self.tile_size - offset[0]
+      y = self.y * self.tile_size - offset[1]
+      selected_item = self.ui.manager.get_selected_item()
+      tilemap = self.ui.game.tilemap.tilemap
+      hover_tile = None
+      if (self.x, self.y) in tilemap:
+        hover_tile = tilemap[(self.x, self.y)]
+      if hover_tile is not None and ((issubclass(hover_tile.__class__, Structure) or issubclass(hover_tile.__class__, Source) and hover_tile.mining)):
+          if hasattr(hover_tile, "mining_rotation"):
+            r = hover_tile.mining_rotation
+          else:
+            r = hover_tile.rotation
+          surface.blit(pygame.transform.rotate(self.arrow_img, r), (x + math.cos(math.radians(r)) * self.tile_size, 
+                                                                    y - math.sin(math.radians(r)) * self.tile_size))
+      elif selected_item != None and issubclass(selected_item.__class__, Structure):
+        r = selected_item.rotation
+        surface.blit(pygame.transform.rotate(selected_item.animation.img(), r), (x, y))
+        surface.blit(pygame.transform.rotate(self.arrow_img, r), (x + math.cos(math.radians(r)) * self.tile_size, 
+                                                                  y - math.sin(math.radians(r)) * self.tile_size))
+      surface.blit(self.img, (x, y))
 
 class Mouse:
   def __init__(self):

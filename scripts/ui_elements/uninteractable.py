@@ -31,7 +31,7 @@ class unInteractableSlot:
         location = (pose[0] + self.pose[0] * self.tile_size,
                     pose[1] + self.pose[1] * self.tile_size)
         tile_difference = (self.tile_size - self.manager.get_tile_size())//2
-        base_img = self.assets[None]
+        base_img = self.assets[None].img()
         surface.blit(base_img, location)
         if self.item != None:
             self.render_item(surface, (location[0] + tile_difference, location[1] + tile_difference))

@@ -19,7 +19,7 @@ class Keyboard:
     
     def keypress(self, idx, ui):
         #print(f"Key {idx} pressed")
-        pass
+        ui.keypress(idx)
     
 class Input:
     def __init__(self, mouse):
