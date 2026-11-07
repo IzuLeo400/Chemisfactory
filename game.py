@@ -16,6 +16,11 @@ class Game:
     def __init__(self):
         pygame.init()
 
+        pygame.mixer.init()
+        BackgroundMusic = pygame.mixer.Sound("assets/Music/cool_space_dystopia.wav")
+        BackgroundMusic.set_volume(0.8)
+        BackgroundMusic.play(-1)
+
         pygame.display.set_caption("Chemisfactory")
         self.screen = pygame.display.set_mode((Constants.screen_width, Constants.screen_height))
         self.display = pygame.Surface((Constants.display_width, Constants.display_height))
