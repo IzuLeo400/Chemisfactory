@@ -17,6 +17,14 @@ class Mine(ProgressAction):
         super().__init__(player, "Mine", ui)
         self.source: Source | None = None
 
+    def set_location(self, location):
+        if (super().set_location(location)):
+            if self.source != None:
+                self.speed = self.source.mining_speed
+                self.difficulty = self.source.difficulty
+                return True
+        return False
+
     def end(self, interrupted) -> bool:
         if not interrupted:
             if self.source != None:

@@ -141,6 +141,9 @@ class Player(PhysicsEntity):
         if self.action_trigger == "Build":
             self.action_trigger = None
             self.set_action("Build")  
+        if self.action_trigger == "Deconstruct":
+            self.action_trigger = None
+            self.set_action("Deconstruct")
         # print(f"self.action_trigger: {self.action_trigger}, self.action.name: {self.action.m_name}")
         
         if abs(self.x_movement) > 0:
@@ -158,7 +161,7 @@ class Player(PhysicsEntity):
                 self.set_direction("w")
                 self.set_action("Walk")
         else:
-            if self.action.m_name == "Mine" or self.action.m_name == "Build":
+            if self.action.m_name == "Mine" or self.action.m_name == "Build" or self.action.m_name == "Deconstruct":
                 return
             self.set_action("Idle")      
         

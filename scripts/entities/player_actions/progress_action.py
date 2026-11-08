@@ -27,8 +27,8 @@ class ProgressAction(Action):
         self.source = None
         return False
 
-    def set_action_item(self, structure):
-        pass
+    def set_action_item(self, structure) -> bool:
+        return True
 
     def start(self) -> bool:
         self.progress = 0 #full bar is at source.difficulty, this is used to determine how long it takes to mine the source

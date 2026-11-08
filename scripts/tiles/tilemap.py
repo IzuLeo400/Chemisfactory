@@ -33,7 +33,7 @@ class Tilemap:
     def physics_rects_around(self, pos, depth):
         rects = []
         for tile in self.tiles_around(pos, depth):
-            if tile.solid:
+            if tile is not None and tile.solid:
                 rects.append(
                     pygame.Rect(tile.pos[0] * self.tile_size,
                                 tile.pos[1] * self.tile_size, self.tile_size,
@@ -48,6 +48,6 @@ class Tilemap:
                     offset[1] // self.tile_size,
                 (offset[1] + surface.get_height()) // self.tile_size + 1):
                 location = (x, y)
-                if location in self.tilemap:
+                if location in self.tilemap and self.tilemap[location] is not None:
                     self.tilemap[(x, y)].render(surface, offset)
                     

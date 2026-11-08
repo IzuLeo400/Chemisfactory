@@ -1,0 +1,27 @@
+Process to create a new action (ideally to make it slightly clearer for others and myself cause I've messed up every single step on here)
+
+1. Make the new action class - inheriting from "Progress_Action" or "Action"
+    This will have most of the functionality:
+        Start() - runs at the start of the action (need to super.start() for progress_action to create progress_bar)
+            returns True for successful start; false for some sort of error (ie: structure or tile undefined)
+        Update() - runs every frame while action is running
+        End(interrupted) - runs at the end of the action - param: interrupted -- bool -- if the action was interrupted (ie: moving away while building)
+            returns True if action was successful; false if not (ie: was interrupted) 
+        set_location() and set_action_item() ran when action is scheduled (in this order)
+            super() -> sets location of cursor (tile your interacting with) 
+                    -> action_item varies (ie: structure you're building or source you're mining from)
+                        default is item currently selected (in ui)
+2. In the player class (or specific entity class that does the action)
+    1. add the action to the entity_actions dictionary
+    2. add the action to the update_animations function 
+        *Make sure to handle both the start of the action and interrupt at the bottom
+3. Add the scheduling of the action to mouse_commands
+    1. Chose specific mouse button to signal start of action (make sure it doesnt conflict with other actions/does different action depending on situation)
+    2. Make specific method that checks all the special cases (like building on top of something else or deconstructing a source without a miner)
+    3. set the self.action_trigger to the name of the action
+    4. run set_location and set_action_item depending on what the functionality of those functions is
+4. Add in all the necessary assets 
+    1. Player animation for the action
+    2. Progress bar stuffs (for progress action)
+5. Figure out what I forgot on this list when it doesnt work :)
+    

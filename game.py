@@ -19,7 +19,7 @@ class Game:
         pygame.mixer.init()
         BackgroundMusic = pygame.mixer.Sound("assets/Music/cool_space_dystopia.wav")
         BackgroundMusic.set_volume(0.8)
-        BackgroundMusic.play(-1)
+        #BackgroundMusic.play(-1)
 
         pygame.display.set_caption("Chemisfactory")
         self.screen = pygame.display.set_mode((Constants.screen_width, Constants.screen_height))
@@ -63,7 +63,13 @@ class Game:
                     "d": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32), img_dur=12),
                     "w": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32), img_dur=12),
                     "a": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32, flipped=True), img_dur=12),
-                }
+                },
+                "Deconstruct": {
+                    "s": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32), img_dur=12),
+                    "d": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32), img_dur=12),
+                    "w": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32), img_dur=12),
+                    "a": Animation(load_tile_sheet('Player/action_spritesheet.png', start_pose=(4, 3), area=(4, 1), tile_size=32, flipped=True), img_dur=12),
+                },
             },
             "UI":{
                 "Cursor": load_image('UI/Cursor.png'),
@@ -95,6 +101,10 @@ class Game:
                     "Build": {
                         None: Animation(load_tile_sheet('UI/emptyBuild.png')),
                         "full": Animation(load_tile_sheet('UI/fullBuild.png')),
+                    },
+                    "Deconstruct": {
+                        None: Animation(load_tile_sheet('UI/emptyDeconstruct.png')),
+                        "full": Animation(load_tile_sheet('UI/fullDeconstruct.png')),
                     },
                 }, 
             },

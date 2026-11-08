@@ -22,6 +22,8 @@ class Build(ProgressAction):
         if structure != None:
             self.speed = structure.build_speed 
             self.difficulty = structure.build_difficulty 
+            return True
+        return False
 
     def start(self) -> bool:
         if self.structure != None:

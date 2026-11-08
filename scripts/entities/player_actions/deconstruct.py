@@ -17,10 +17,22 @@ class Deconstruct(ProgressAction):
         super().__init__(player, "Deconstruct", ui)
     
     def set_action_item(self, structure):
-        self.structure = structure
-        if structure != None:
-            self.speed = structure.build_speed 
-            self.difficulty = structure.build_difficulty 
+        tilemap = self.m_entity.tilemap.tilemap
+        if self.location in tilemap:
+            tile = tilemap[self.location]
+            if tile != None:
+                self.structure = tile
+                if issubclass(tile.__class__, Structure):
+                    self.speed = tile.build_speed
+                    self.difficulty = tile.build_difficulty
+                elif (issubclass(tile.__class__, Source) and tile.mining):
+                    self.speed = tile.miner.build_speed
+                    self.difficulty = tile.miner.build_difficulty
+                else:
+                    return False
+                return True
+        return False
+                
 
     def start(self) -> bool:
         if self.structure != None:
@@ -33,10 +45,11 @@ class Deconstruct(ProgressAction):
         if not interrupted:
             if self.structure != None:
                 if self.source != None:
+                    self.ui.add_item(self.source.miner)
                     self.source.remove_miner()
                 else:
                     self.m_entity.tilemap.tilemap[(self.location)] = None
-                self.ui.add_item(self.structure)
+                    self.ui.add_item(self.structure)
                 self.m_entity.action_trigger = "Cancel"
                 return super().end(False)
             else:
