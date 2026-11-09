@@ -42,7 +42,9 @@ class Build(ProgressAction):
                 elif self.structure != None:
                     #print(f"Building {self.structure.name} at {self.location}")
                     self.structure.pos = self.location
-                    self.m_entity.tilemap.tilemap[(self.location)] = self.structure.copy()
+                    tilemap = self.m_entity.tilemap.tilemap
+                    tilemap[self.location] = self.structure.copy()
+                    tilemap[self.location].update_io(tilemap)
                     self.ui.remove_item()
                 else:
                     return super().end(True)
