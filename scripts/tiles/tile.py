@@ -3,7 +3,7 @@ import math
 import pygame
 
 from scripts.constants import Constants
-from scripts.exceptions.UninitiatedValueError import UninitiatedValueError
+from scripts.exceptions.CustomErrors import UninitiatedValueError
 
 class Tile:
     def __init__(self, pos, size, animation, solid=True, rotation=0):

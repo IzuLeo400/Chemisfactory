@@ -1,4 +1,4 @@
-from scripts.exceptions.InventoryItemManagementError import InventoryItemManagementError
+from scripts.exceptions.CustomErrors import InventoryItemManagementError
 from scripts.ui_elements.inputs import Input
 from scripts.ui_elements.interactable import Interactable
 from scripts.ui_elements.hotbar import Hotbar

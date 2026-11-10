@@ -1,5 +1,5 @@
 import pygame
-from scripts.exceptions.InventoryItemManagementError import InventoryItemManagementError
+from scripts.exceptions.CustomErrors import InventoryItemManagementError
 from scripts.tiles.item import Item
 from scripts.ui_elements.window import Manager, Window
 from scripts.constants import Constants

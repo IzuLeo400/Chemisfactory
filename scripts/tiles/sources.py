@@ -2,7 +2,7 @@ import math
 
 import pygame
 from scripts.constants import Constants
-from scripts.exceptions.UninitiatedValueError import UninitiatedValueError
+from scripts.exceptions.CustomErrors import UninitiatedValueError
 from scripts.sprites import Animation
 from scripts.tiles.item import Item
 from scripts.tiles.tile import Tile
@@ -27,8 +27,14 @@ class Source(Tile):
         self.miner = None
 
     def add_miner(self, structure):
-        self.miner = structure
-        self.mining = True
+        if self.miner == None and structure != None:
+            self.miner = structure
+            assert self.miner is not None
+            self.miner.pos = self.pos
+            self.miner.source = self
+            self.mining = True
+            return True
+        return False
 
     def remove_miner(self):
         self.mining = False

@@ -5,6 +5,7 @@ from scripts.tiles.item import Item
 from scripts.tiles.structures.structure import Structure
 from scripts.ui_elements.uninteractable import unInteractable
 from scripts.tiles.sources import Source
+from scripts.exceptions.CustomErrors import StractureManagementError
 
 class Build(ProgressAction):
     """
@@ -36,23 +37,28 @@ class Build(ProgressAction):
     def end(self, interrupted):
         if not interrupted:
             if self.structure != None:
+                tilemap = self.m_entity.tilemap.tilemap
                 if self.source != None:
-                    self.source.add_miner(self.structure)
-                    self.ui.remove_item()
-                elif self.structure != None:
+                    if (self.source.add_miner(self.structure)):
+                        assert self.source.miner is not None
+                        self.source.miner.update_io(tilemap)
+                        self.ui.remove_item()
+                    else:
+                        raise StractureManagementError("Failed to assign building to a Source \n Possibly already a Structure on the Source")
+                else:
                     #print(f"Building {self.structure.name} at {self.location}")
                     self.structure.pos = self.location
-                    tilemap = self.m_entity.tilemap.tilemap
                     tilemap[self.location] = self.structure.copy()
                     tilemap[self.location].update_io(tilemap)
+                    print("inputs:", tilemap[self.location].io.inputs)
+                    print("outputs:", tilemap[self.location].io.outputs)
                     self.ui.remove_item()
-                else:
-                    return super().end(True)
                 self.m_entity.action_trigger = "Cancel"
+                #Action Successful
                 return super().end(False)
             else:
-                self.m_entity.action_trigger = "Cancel"
-                return super().end(True)
+                raise StractureManagementError("Build action structure is None")
         else:
+            #Action is interrupted through regular means
             return super().end(True)
         
