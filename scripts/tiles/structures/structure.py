@@ -28,18 +28,18 @@ class StructureIO():
             tiles.append(self.inputs[input])
         return tiles
 
-    def update_rotation(self, rotation):
-        #x' = x * cos(r) - y * sin(r)
-        #y' = x * sin(r) + y * cos(r)
+    def update_rotation(self, rotation, pos):
+        #x' = vx * cos(r) - vy * sin(r) + x
+        #y' = vx * sin(r) + vy * cos(r) + y
         new_inputs = {}
         new_outputs = {}
         for input in self.io["inputs"]:
-            new_input = (input[0] * math.cos(math.radians(rotation)) - input[1] * math.sin(math.radians(rotation)), 
-                         input[0] * math.sin(math.radians(rotation)) + input[1] * math.cos(math.radians(rotation)))
+            new_input = (input[0] * math.cos(math.radians(rotation)) - input[1] * math.sin(math.radians(rotation)) + pos[0], 
+                         input[0] * math.sin(math.radians(rotation)) + input[1] * math.cos(math.radians(rotation)) + pos[1])
             new_inputs[new_input] = None
         for output in self.io["outputs"]:
-            new_output = (output[0] * math.cos(math.radians(rotation)) -output[1] * math.sin(math.radians(rotation)), 
-                          output[0] * math.sin(math.radians(rotation)) + output[1] * math.cos(math.radians(rotation)))
+            new_output = (output[0] * math.cos(math.radians(rotation)) - output[1] * math.sin(math.radians(rotation) + pos[0]), 
+                          output[0] * math.sin(math.radians(rotation)) + output[1] * math.cos(math.radians(rotation)) + pos[1])
             new_outputs[new_output] = None
         self.inputs = new_inputs
         self.outputs = new_outputs
@@ -109,7 +109,7 @@ class Structure(Item):
         super().render(surface, offset)
 
     def update_io(self, tilemap, update_neighbors=True):
-        self.io.update_rotation(self.rotation)
+        self.io.update_rotation(self.rotation, self.pos)
         self.io.update_positions(self.pos, tilemap, update_neighbors)
         self.io.update_connection()
 
