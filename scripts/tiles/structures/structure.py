@@ -15,6 +15,7 @@ class StructureIO():
         self.io = {"inputs": inputs, "outputs": outputs}
         #example io: {(x_offset, y_offset): tile, (x_offset2, y_offset2): tile2}
         self.connected = False #True when all inputs and outputs exist and are connected
+        self.m_structure: Structure | None = None #Set in the creation of the Structure Class
 
     def get_output_tiles(self):
         tiles = []
@@ -28,46 +29,77 @@ class StructureIO():
             tiles.append(self.inputs[input])
         return tiles
 
-    def update_rotation(self, rotation, pos):
+    def update_rotation(self, rotation):
         #x' = vx * cos(r) - vy * sin(r) + x
         #y' = vx * sin(r) + vy * cos(r) + y
         new_inputs = {}
         new_outputs = {}
         for input in self.io["inputs"]:
-            new_input = (input[0] * math.cos(math.radians(rotation)) - input[1] * math.sin(math.radians(rotation)) + pos[0], 
-                         input[0] * math.sin(math.radians(rotation)) + input[1] * math.cos(math.radians(rotation)) + pos[1])
+            new_input = (self.fix_trig(input[0] * math.cos(math.radians(rotation)) - input[1] * math.sin(math.radians(rotation))), 
+                         self.fix_trig(input[0] * math.sin(math.radians(rotation)) + input[1] * math.cos(math.radians(rotation))))
             new_inputs[new_input] = None
         for output in self.io["outputs"]:
-            new_output = (output[0] * math.cos(math.radians(rotation)) - output[1] * math.sin(math.radians(rotation) + pos[0]), 
-                          output[0] * math.sin(math.radians(rotation)) + output[1] * math.cos(math.radians(rotation)) + pos[1])
+            new_output = (self.fix_trig(output[0] * math.cos(math.radians(rotation)) - output[1] * math.sin(math.radians(rotation))), 
+                          self.fix_trig(output[0] * math.sin(math.radians(rotation)) + output[1] * math.cos(math.radians(rotation))))
             new_outputs[new_output] = None
         self.inputs = new_inputs
         self.outputs = new_outputs
+        #print("new inputs", new_inputs)
+        #print("new outputs", new_outputs)
+
+    def fix_trig(self, value):
+        if (abs(value) < 0.1):
+            return 0
+        return value
 
     def update_positions(self, pos, tilemap, update_neighbors=True):
         for input in self.inputs:
-            input_pos = (input[0] + pos[1], input[1] + pos[1])
-            if input_pos in tilemap and (issubclass(tilemap[input_pos].__class__, Structure) or (issubclass(tilemap[input_pos].__class__, Source) and tilemap[input_pos].miner != None)):
+            input_pos = (input[0] + pos[0], input[1] + pos[1])
+            #print("input", input) print("pos", pos) print("input pos: ", input_pos)
+            if input_pos in tilemap:
                 self.inputs[input] = tilemap[input_pos]
                 if update_neighbors:
-                    self.inputs[input].update_io(tilemap, False)
+                    if issubclass(tilemap[input_pos].__class__, Structure):
+                        self.inputs[input].update_io(tilemap, False)
+                        #print(f"updating tile @ {input_pos}, its new output is {self.inputs[input].update_io(tilemap, False)}")
+                    elif issubclass(tilemap[input_pos].__class__, Source) and tilemap[input_pos].miner != None:
+                        self.inputs[input].miner.update_io(tilemap, False)
+                        #print(f"updating tile @ {input_pos}, its new output is {self.inputs[input].miner.update_io(tilemap, False)}")
+                
         for output in self.outputs:
-            output_pos = (output[0] + pos[1], output[1] + pos[1])
-            if output_pos in tilemap and (issubclass(tilemap[output_pos].__class__, Structure) or (issubclass(tilemap[output_pos].__class__, Source) and tilemap[output_pos].miner != None)):
+            output_pos = (output[0] + pos[0], output[1] + pos[1])
+            #print("output pos: ", output_pos)
+            if output_pos in tilemap:
                 self.outputs[output] = tilemap[output_pos]
                 if update_neighbors:
-                    self.outputs[output].update_io(tilemap, False)
+                    if issubclass(tilemap[output_pos].__class__, Structure):
+                        self.outputs[output].update_io(tilemap, False)
+                    elif issubclass(tilemap[output_pos].__class__, Source) and tilemap[output_pos].miner != None:
+                        self.outputs[output].miner.update_io(tilemap, False)
+
+        self.update_connection()
 
     def update_connection(self):
         for input in self.inputs:
             if self.inputs[input] == None:
+                #print("input is null")
                 self.connected = False
                 return False
             if issubclass(self.inputs[input].__class__, Source):
                 structure = self.inputs[input].miner
             else:
                 structure = self.inputs[input]
-            if (-input[0], -input[1]) not in structure.io.outputs or structure.io.outputs[(-input[0], -input[1])] != self:
+            if structure == None:
+                self.connected = False
+                return False
+            if (-input[0], -input[1]) not in structure.io.outputs or structure.io.outputs[(-input[0], -input[1])] != self.m_structure:
+                #print("self is not in other structures outputs")
+                #print("checking other structre with output: ", (-input[0], -input[1]))
+                #if ((-input[0], -input[1]) in structure.io.outputs):
+                #    print("other structers output", structure.io.outputs[(-input[0], -input[1])], "---position: ", structure.io.outputs[(-input[0], -input[1])].pos)
+                #    print("self", self.m_structure, "---position: ", self.m_structure.pos) # type: ignore
+                #else:
+                #    print ("was not in other structures outputs")
                 self.connected = False
                 return False
 
@@ -77,9 +109,12 @@ class StructureIO():
                 return False
             else:
                 structure = self.outputs[output]
-            if (-output[0], -output[1]) not in structure.io.inputs or structure.io.inputs[(-output[0], -output[1])].io is not self:
-                self.connected = False
-                return False
+            if (-output[0], -output[1]) not in structure.io.inputs:
+                tile = structure.io.inputs[(-output[0], -output[1])]
+                if (issubclass(tile.__class__, Source) and tile.miner != self.m_structure) or tile != self.m_structure:
+                    print(structure.io.inputs[(-output[0], -output[1])], self.m_structure)
+                    self.connected = False
+                    return False
 
         self.connected = True
         return True
@@ -92,16 +127,23 @@ class Structure(Item):
         self.build_difficulty = build_difficulty
         self.source = source
         self.io = io
+        self.io.m_structure = self
 
-    def render(self, surface, offset=(0, 0), img=None, tilemap=True):
+    def render(self, surface, offset=(0, 0), img=None, tilemap=True, debug=False):
         self.animation.update()
         if self.source is not None:
             self.source.render(surface, offset)
-        if self.pos is not None:
+            if (debug and self.pos != None):
+                pygame.draw.rect(surface, (0, 200, 0) if self.io.connected else (200, 0, 0), 
+                pygame.Rect((self.pos[0] * self.size - offset[0], self.pos[1] * self.size - offset[1]), (4, 4)))
+        if self.pos != None:
             if tilemap:
-                surface.blit(pygame.transform.rotate(self.animation.img(), self.rotation),
-                                        (self.pos[0] * self.size - offset[0],
-                                        self.pos[1] * self.size - offset[1]))     
+                pos = (self.pos[0] * self.size - offset[0],
+                        self.pos[1] * self.size - offset[1])
+                surface.blit(pygame.transform.rotate(self.animation.img(), self.rotation), pos)   
+                if (debug):
+                    pygame.draw.rect(surface, (0, 200, 0) if self.io.connected else (200, 0, 0), pygame.Rect(pos, (4, 4)))
+                
                 return
         else:
             raise UninitiatedValueError("Tile position is None, cannot render tile without a position.")
@@ -109,9 +151,9 @@ class Structure(Item):
         super().render(surface, offset)
 
     def update_io(self, tilemap, update_neighbors=True):
-        self.io.update_rotation(self.rotation, self.pos)
-        self.io.update_positions(self.pos, tilemap, update_neighbors)
-        self.io.update_connection()
+        self.io.update_rotation(self.rotation)
+        self.io.update_positions(self.pos, tilemap, update_neighbors) 
+        return self.io.outputs
 
     def copy(self):
         return Structure(self.name, self.pos, self.size, self.animation, self.build_speed, self.build_difficulty, self.rotation, self.source, self.solid)

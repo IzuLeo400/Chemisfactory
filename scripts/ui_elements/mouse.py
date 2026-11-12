@@ -45,8 +45,8 @@ class Cursor:
       if (self.x, self.y) in tilemap:
         hover_tile = tilemap[(self.x, self.y)]
       if hover_tile is not None and ((issubclass(hover_tile.__class__, Structure) or issubclass(hover_tile.__class__, Source) and hover_tile.mining)):
-          if hasattr(hover_tile, "mining_rotation"):
-            r = hover_tile.mining_rotation
+          if issubclass(hover_tile.__class__, Source):
+            r = hover_tile.miner.rotation
           else:
             r = hover_tile.rotation
           surface.blit(pygame.transform.rotate(self.arrow_img, r), (x + math.cos(math.radians(r)) * self.tile_size, 

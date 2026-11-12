@@ -2,7 +2,7 @@ import math
 
 import pygame
 from scripts.constants import Constants
-from scripts.exceptions.CustomErrors import UninitiatedValueError
+from scripts.exceptions.CustomErrors import StractureManagementError, UninitiatedValueError
 from scripts.sprites import Animation
 from scripts.tiles.item import Item
 from scripts.tiles.tile import Tile
@@ -37,13 +37,21 @@ class Source(Tile):
         return False
 
     def remove_miner(self):
-        self.mining = False
-        self.miner = None
+        if self.miner != None:
+            miner = self.miner
+            self.mining = False
+            self.miner = None
+            return miner
+        raise StractureManagementError("Attempted to remove a miner from a source without a miner")
     
-    def render(self, surface, offset=(0, 0), img=None):
+    def render(self, surface, offset=(0, 0), img=None, tilemap=False, debug=False):
         super().render(surface, offset)
         if self.mining and self.miner != None:
             super().render(surface, offset, pygame.transform.rotate(self.miner.animation.img(), self.miner.rotation))
+            if (debug and self.pos != None):
+                pos = (self.pos[0] * self.size - offset[0],
+                        self.pos[1] * self.size - offset[1])
+                pygame.draw.rect(surface, (0, 200, 0) if self.miner.io.connected else (200, 0, 0), pygame.Rect(pos, (4, 4)))
 
 class Hydrogen(Source):
     def __init__(self, pos, img, size, game):

@@ -3,12 +3,12 @@ import pygame
 from scripts.constants import Constants
 
 #default letter width = 4px, letter height always 6px
-irregular_letters = {"1":3, "7":5}
+irregular_letters = {"1":3, "7":5, "x":3, "y": 5, "-":3}
 
 class Text:
     def __init__(self, assets):
         self.assets = assets
-        self.letters = {"0":None, "1":None, "2":None, "3":None, "4":None, "5":None, "6":None, "7":None, "8":None, "9":None,}
+        self.letters = {"0":None, "1":None, "2":None, "3":None, "4":None, "5":None, "6":None, "7":None, "8":None, "9":None, "x":None, "y":None, "-":None}
         self.fill_alphabet()
         self.letter_gap = Constants.letter_gap
         self.letter_width = Constants.letter_width

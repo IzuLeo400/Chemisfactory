@@ -13,7 +13,7 @@ class Tile:
         self.animation = animation
         self.rotation = rotation
 
-    def render(self, surface, offset=(0, 0), img=None):
+    def render(self, surface, offset=(0, 0), img=None, tilemap=False, debug=False):
         self.animation.update()
         if self.pos is not None:
             if img is None:

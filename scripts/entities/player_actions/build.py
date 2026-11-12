@@ -39,19 +39,23 @@ class Build(ProgressAction):
             if self.structure != None:
                 tilemap = self.m_entity.tilemap.tilemap
                 if self.source != None:
-                    if (self.source.add_miner(self.structure)):
+                    self.structure.pos = self.location
+                    if (self.source.add_miner(self.structure.copy())):
                         assert self.source.miner is not None
                         self.source.miner.update_io(tilemap)
                         self.ui.remove_item()
+                        
                     else:
-                        raise StractureManagementError("Failed to assign building to a Source \n Possibly already a Structure on the Source")
+                        raise StractureManagementError("Failed to assign Structure to Source \n Possibly already a Structure on the Source")
                 else:
                     #print(f"Building {self.structure.name} at {self.location}")
                     self.structure.pos = self.location
                     tilemap[self.location] = self.structure.copy()
                     tilemap[self.location].update_io(tilemap)
-                    print("inputs:", tilemap[self.location].io.inputs)
-                    print("outputs:", tilemap[self.location].io.outputs)
+                    #print("position: ", self.location)
+                    #print("inputs:", tilemap[self.location].io.inputs)
+                    #print("outputs:", tilemap[self.location].io.outputs)
+                    #print("connected: ", tilemap[self.location].io.connected)
                     self.ui.remove_item()
                 self.m_entity.action_trigger = "Cancel"
                 #Action Successful

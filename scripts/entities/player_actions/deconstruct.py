@@ -44,12 +44,15 @@ class Deconstruct(ProgressAction):
     def end(self, interrupted):
         if not interrupted:
             if self.structure != None:
+                tilemap = self.m_entity.tilemap.tilemap
                 if self.source != None:
                     self.ui.add_item(self.source.miner)
-                    self.source.remove_miner()
+                    structure = self.source.remove_miner()
                 else:
-                    self.m_entity.tilemap.tilemap[(self.location)] = None
+                    structure = tilemap[(self.location)]
+                    tilemap[(self.location)] = None
                     self.ui.add_item(self.structure)
+                structure.update_io(tilemap)
                 self.m_entity.action_trigger = "Cancel"
                 return super().end(False)
             else:

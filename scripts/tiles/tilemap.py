@@ -41,6 +41,7 @@ class Tilemap:
         return rects
 
     def render(self, surface, offset=(0, 0)):
+        debug = self.game.ui.debug
         for x in range(offset[0] // self.tile_size,
                        (offset[0] + surface.get_width()) // self.tile_size +
                        1):
@@ -49,5 +50,5 @@ class Tilemap:
                 (offset[1] + surface.get_height()) // self.tile_size + 1):
                 location = (x, y)
                 if location in self.tilemap and self.tilemap[location] is not None:
-                    self.tilemap[(x, y)].render(surface, offset)
+                    self.tilemap[(x, y)].render(surface, offset, debug=debug)
                     

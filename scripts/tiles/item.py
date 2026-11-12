@@ -5,7 +5,7 @@ class Item(Tile):
         super().__init__(pos, size, animation, solid, rotation)
         self.name = name
 
-    def render(self, surface, offset=(0, 0), img=None, tilemap=False):
+    def render(self, surface, offset=(0, 0), img=None, tilemap=False, debug=False):
         self.animation.update()
         surface.blit(self.animation.img(), (offset[0], offset[1]))
 

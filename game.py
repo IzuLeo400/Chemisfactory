@@ -92,6 +92,9 @@ class Game:
                     "7": load_image('UI/font/7.png'),
                     "8": load_image('UI/font/8.png'),
                     "9": load_image('UI/font/9.png'),
+                    "x": load_image('UI/font/x.png'),
+                    "y": load_image('UI/font/y.png'),
+                    "-": load_image('UI/font/-.png')
                 },
                 "ProgressBar":{
                     "Mine": {
@@ -126,7 +129,7 @@ class Game:
 
         self.ui = UI(self, self.assets["UI"], self.input, Constants.inventory_tile_size)
 
-        self.ui.hotbar.items[(0, 0)].set_item(Miner((0, 0), Constants.tile_size, self.assets["Tiles"]["Structures"]["Miner"], None), 2)
+        self.ui.hotbar.items[(0, 0)].set_item(Miner((0, 0), Constants.tile_size, self.assets["Tiles"]["Structures"]["Miner"]), 2)
         self.ui.hotbar.items[(1, 0)].set_item(Belt((0, 0), Constants.tile_size, self.assets["Tiles"]["Structures"]["Belt"]), 8)
 
         self.player = Player(self, (0, 0), (6, 6), (13, 16))

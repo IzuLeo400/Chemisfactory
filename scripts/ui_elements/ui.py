@@ -39,6 +39,7 @@ class UI:
         self.game = game
         self.assets = assets
         self.tile_size = tile_size
+        self.debug = False
         self.text = Text(assets["Font"])
         self.open_interactables = {}
         self.all_windows = {}
@@ -92,6 +93,9 @@ class UI:
         for name in self.render_order:
             interactable = self.open_interactables[name]
             interactable.render(surface)      
+        if self.debug:
+            pose = self.cursor.pose()
+            self.text.box_render(f"x{pose[0]}y{pose[1]}", surface, (2,2))
 
     def render_cursor(self, surface, offset=(0, 0)):
         self.cursor.render(surface, offset)  
@@ -132,3 +136,5 @@ class UI:
                 selected_item = self.manager.get_selected_item()
                 if selected_item != None:
                      selected_item.rotate() 
+            case 15: #P
+                self.debug = not self.debug
