@@ -44,9 +44,24 @@ class ProgressAction(Action):
         return False
 
     def set_action_item(self, structure) -> bool:
+        '''
+        sets the item being used or interacted with in the action \n
+        the super method returns True no matter what so you don't have to override it if not necessary
+        
+        :param structure: -- Structure -- the structure being built or deconstructed or otherwise interacted with
+
+        :return success: -- Boolean -- whether or not successfully set the item \n
+        possible fails (return False): there already is an item set or the item given is null
+        '''
         return True
 
     def start(self) -> bool:
+        '''
+        Called when the action is initialized \n
+        Creates a new progress bar
+
+        :return success: -- Boolean -- whether action was successful
+        '''
         self.progress = 0 #full bar is at source.difficulty, this is used to determine how long it takes to mine the source
         self.progressBar = unInteractable("progressBar", self.ui, self.ui.assets["ProgressBar"][self.m_name], 16,
                              (Constants.screen_width/4 - self.difficulty/2*16, Constants.screen_height/4 - 1/2*16 + Constants.progress_bar_y_offset), 
@@ -54,7 +69,11 @@ class ProgressAction(Action):
         return True
         
     def update(self) -> bool:
-        #Update the uninteractable from here to make it seem like the player is doing something
+        '''
+        Update the uninteractable (progress bar) to make it seem like the player is doing something \n
+
+        :return success: -- Boolean -- whether the update succeded
+        '''
         self.progress += self.speed / 60
         if self.progress >= self.difficulty:
             return self.end(False)
@@ -68,6 +87,13 @@ class ProgressAction(Action):
         
 
     def end(self, interrupted) -> bool:
+        '''
+        Called at the end the action, whether successful or not
+
+        :param interrupted: -- Boolean -- whether the action was interrupted, like by moving 
+
+        :return success: --Boolean -- whether the whole action succeded
+        '''
         if self.progressBar != None:
             if interrupted:
                 self.progressBar.delete()

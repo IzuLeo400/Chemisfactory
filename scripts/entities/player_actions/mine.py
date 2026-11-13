@@ -18,6 +18,13 @@ class Mine(ProgressAction):
         self.source: Source | None = None
 
     def set_location(self, location):
+        '''
+        Sets the location of the source being mined
+
+        :param location: -- tuple(int, int) -- the location of the source on the tilemap
+
+        :returns success: -- Boolean -- 
+        '''
         if (super().set_location(location)):
             if self.source != None:
                 self.speed = self.source.mining_speed
