@@ -9,13 +9,13 @@ from scripts.tiles.tile import Tile
 
 
 class StructureIO():
-    def __init__(self, inputs: dict, outputs: dict):
+    def __init__(self, inputs: dict, outputs: dict, structure):
         self.inputs = inputs
         self.outputs = outputs
         self.io = {"inputs": inputs, "outputs": outputs}
         #example io: {(x_offset, y_offset): tile, (x_offset2, y_offset2): tile2}
         self.connected = False #True when all inputs and outputs exist and are connected
-        self.m_structure: Structure | None = None #Set in the creation of the Structure Class
+        self.m_structure: Structure = structure #Set in the creation of the Structure Class
 
     def get_output_tiles(self):
         tiles = []
@@ -36,16 +36,16 @@ class StructureIO():
         new_outputs = {}
         for input in self.io["inputs"]:
             new_input = (self.fix_trig(input[0] * math.cos(math.radians(rotation)) - input[1] * math.sin(math.radians(rotation))), 
-                         self.fix_trig(input[0] * math.sin(math.radians(rotation)) + input[1] * math.cos(math.radians(rotation))))
+                         self.fix_trig(- input[0] * math.sin(math.radians(rotation)) + input[1] * math.cos(math.radians(rotation))))
             new_inputs[new_input] = None
         for output in self.io["outputs"]:
             new_output = (self.fix_trig(output[0] * math.cos(math.radians(rotation)) - output[1] * math.sin(math.radians(rotation))), 
-                          self.fix_trig(output[0] * math.sin(math.radians(rotation)) + output[1] * math.cos(math.radians(rotation))))
+                          self.fix_trig(- output[0] * math.sin(math.radians(rotation)) + output[1] * math.cos(math.radians(rotation))))
             new_outputs[new_output] = None
         self.inputs = new_inputs
         self.outputs = new_outputs
-        #print("new inputs", new_inputs)
-        #print("new outputs", new_outputs)
+        print("new inputs", new_inputs)
+        print("new outputs", new_outputs)
 
     def fix_trig(self, value):
         if (abs(value) < 0.1):
@@ -74,8 +74,6 @@ class StructureIO():
                 if update_neighbors:
                     if issubclass(tilemap[output_pos].__class__, Structure):
                         self.outputs[output].update_io(tilemap, False)
-                    elif issubclass(tilemap[output_pos].__class__, Source) and tilemap[output_pos].miner != None:
-                        self.outputs[output].miner.update_io(tilemap, False)
 
         self.update_connection()
 
@@ -93,13 +91,6 @@ class StructureIO():
                 self.connected = False
                 return False
             if (-input[0], -input[1]) not in structure.io.outputs or structure.io.outputs[(-input[0], -input[1])] != self.m_structure:
-                #print("self is not in other structures outputs")
-                #print("checking other structre with output: ", (-input[0], -input[1]))
-                #if ((-input[0], -input[1]) in structure.io.outputs):
-                #    print("other structers output", structure.io.outputs[(-input[0], -input[1])], "---position: ", structure.io.outputs[(-input[0], -input[1])].pos)
-                #    print("self", self.m_structure, "---position: ", self.m_structure.pos) # type: ignore
-                #else:
-                #    print ("was not in other structures outputs")
                 self.connected = False
                 return False
 
@@ -109,25 +100,28 @@ class StructureIO():
                 return False
             else:
                 structure = self.outputs[output]
-            if (-output[0], -output[1]) not in structure.io.inputs:
+            if (-output[0], -output[1]) in structure.io.inputs:
                 tile = structure.io.inputs[(-output[0], -output[1])]
-                if (issubclass(tile.__class__, Source) and tile.miner != self.m_structure) or tile != self.m_structure:
-                    print(structure.io.inputs[(-output[0], -output[1])], self.m_structure)
+                if (issubclass(tile.__class__, Source) or tile != self.m_structure):
                     self.connected = False
                     return False
+            else:
+                self.connected = False
+                return False
 
         self.connected = True
         return True
 
+    def copy(self):
+        return StructureIO(self.io["inputs"], self.io["outputs"], self.m_structure)
     
 class Structure(Item):
-    def __init__(self, name, pos=(None, None), size=16, animation=None, build_speed=1, build_difficulty=4, rotation=0, source=None, solid=True, io=StructureIO(inputs={}, outputs={})):
+    def __init__(self, name, pos, io, size=16, animation=None, build_speed=1, build_difficulty=4, rotation=0, source=None, solid=True):
         super().__init__(name, pos, size, animation, solid=solid, rotation=rotation)
         self.build_speed = build_speed
         self.build_difficulty = build_difficulty
         self.source = source
-        self.io = io
-        self.io.m_structure = self
+        self.io: StructureIO = io
 
     def render(self, surface, offset=(0, 0), img=None, tilemap=True, debug=False):
         self.animation.update()
@@ -156,7 +150,7 @@ class Structure(Item):
         return self.io.outputs
 
     def copy(self):
-        return Structure(self.name, self.pos, self.size, self.animation, self.build_speed, self.build_difficulty, self.rotation, self.source, self.solid)
+        return Structure(self.name, self.pos, self.io.copy(), self.size, self.animation, self.build_speed, self.build_difficulty, self.rotation, self.source, self.solid)
 
             
             
