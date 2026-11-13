@@ -7,6 +7,17 @@ from scripts.ui_elements.uninteractable import unInteractable
 from scripts.ui_elements.window import Window
 
 class ProgressAction(Action):
+    '''
+    The abstract class for an action that requires a progress bar \n
+    progress bar is a rectangle at the bottom of the screen that fills up with squares 
+
+    :param player: -- Player -- the player performing the action
+    :param name: -- String -- the name of the action for identification purposes
+    :param ui: -- UI -- the ui class for the game to create and destroy ui elements
+    :param speed: -- int -- default = 1 -- the speed of the action 
+    (one square per speed/60 frames, so speed of 1 is 1 square per second)
+    :param difficulty: -- int -- default = 5 -- the amount of squares needed to be filled up to complete the action (size of progress bar)
+    '''
     def __init__(self, player, name, ui, speed=1, difficulty=5):
         super().__init__(player, name, self.start, self.update, self.end)
         self.ui = ui
@@ -18,6 +29,11 @@ class ProgressAction(Action):
         self.location: tuple[int, int] | None = None
 
     def set_location(self, location):
+        '''
+        sets the location of the action
+
+        :param location: -- tuple(int, int) -- the location on the tilemap that the action is happening (the location of the tile being interacted with)
+        '''
         self.location = location
         if location in self.m_entity.tilemap.tilemap:
             tile = self.m_entity.tilemap.tilemap[location]

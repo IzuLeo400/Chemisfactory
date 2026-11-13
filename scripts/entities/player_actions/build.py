@@ -11,8 +11,8 @@ class Build(ProgressAction):
     """
     The action of building structures
 
-    :param player: the player preforming the action
-    :param ui: The UI class for the whole game to make and destroy the ui elements accompanying the building
+    :param player: -- Player -- the player performing the action
+    :param ui: -- UI -- The UI for the whole game to make and destroy the ui elements accompanying the building
     """
     def __init__(self, player, ui):
         super().__init__(player, "Build", ui)
