@@ -71,6 +71,11 @@ def off_source_deconstruct(self) -> bool:
     return False
 
 def left_click(self) -> bool:
+    '''
+    runnable method by the player when a left click occurs (off ui)
+
+    handles mining and deconstruction (both on and off source)
+    '''
     if (source_click(self, "Deconstruct")):
         return True
     if (source_click(self, "Mine")):

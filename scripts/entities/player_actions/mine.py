@@ -19,11 +19,12 @@ class Mine(ProgressAction):
 
     def set_location(self, location):
         '''
-        Sets the location of the source being mined
+        Sets the location of the source being mined, \n 
+        Sets the speed and difficulty of the mining action associated with that source
 
         :param location: -- tuple(int, int) -- the location of the source on the tilemap
 
-        :returns success: -- Boolean -- 
+        :returns success: -- Boolean -- if the location is valid (is on the tilemap and has a source)
         '''
         if (super().set_location(location)):
             if self.source != None:
@@ -33,6 +34,14 @@ class Mine(ProgressAction):
         return False
 
     def end(self, interrupted) -> bool:
+        '''
+        Method called when ending the action \n
+        If the action completed without interrupt it will give the player the atom item depending on the source they are mining from
+
+        :param interrupted: -- Boolean -- whether the action is interrupted, like by moving
+
+        :returns success: -- Boolean -- whether the whole action was successful
+        '''
         if not interrupted:
             if self.source != None:
                 self.ui.add_item(self.source.item)
